@@ -5,9 +5,11 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+import com.comphenix.protocol.wrappers.*;
+import fr.leomelki.com.comphenix.packetwrapper.*;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_15_R1.entity.CraftPlayer;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -16,14 +18,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import com.comphenix.protocol.wrappers.EnumWrappers.NativeGameMode;
 import com.comphenix.protocol.wrappers.EnumWrappers.PlayerInfoAction;
 import com.comphenix.protocol.wrappers.EnumWrappers.TitleAction;
-import com.comphenix.protocol.wrappers.PlayerInfoData;
-import com.comphenix.protocol.wrappers.WrappedChatComponent;
-import com.comphenix.protocol.wrappers.WrappedGameProfile;
 
-import fr.leomelki.com.comphenix.packetwrapper.WrapperPlayServerChat;
-import fr.leomelki.com.comphenix.packetwrapper.WrapperPlayServerPlayerInfo;
-import fr.leomelki.com.comphenix.packetwrapper.WrapperPlayServerScoreboardTeam;
-import fr.leomelki.com.comphenix.packetwrapper.WrapperPlayServerTitle;
 import fr.leomelki.loupgarou.MainLg;
 import fr.leomelki.loupgarou.classes.chat.LGChat;
 import fr.leomelki.loupgarou.classes.chat.LGChat.LGChatCallback;
@@ -36,10 +31,6 @@ import fr.leomelki.loupgarou.utils.VariableCache;
 import fr.leomelki.loupgarou.utils.VariousUtils;
 import lombok.Getter;
 import lombok.Setter;
-import net.minecraft.server.v1_15_R1.DimensionManager;
-import net.minecraft.server.v1_15_R1.EnumGamemode;
-import net.minecraft.server.v1_15_R1.PacketPlayOutRespawn;
-import net.minecraft.server.v1_15_R1.WorldType;
 
 public class LGPlayer {
 	private static HashMap<Player, LGPlayer> cachedPlayers = new HashMap<Player, LGPlayer>();
@@ -244,9 +235,14 @@ public class LGPlayer {
 			WrappedGameProfile gameProfile = new WrappedGameProfile(getPlayer().getUniqueId(), getPlayer().getName());
 			infos.setData(Arrays.asList(new PlayerInfoData(gameProfile, 10, NativeGameMode.SURVIVAL, WrappedChatComponent.fromText(getPlayer().getName()))));
 			infos.sendPacket(getPlayer());
+			World world = player.getWorld();
+			WrapperPlayServerRespawn respawnPacket = new WrapperPlayServerRespawn();
+			respawnPacket.setGamemode(NativeGameMode.fromBukkit(player.getGameMode()));
+			respawnPacket.setDimension(world.getEnvironment().getId());
+			respawnPacket.setDifficulty(EnumWrappers.Difficulty.valueOf(world.getDifficulty().name()));
+			respawnPacket.setLevelType(world.getWorldType());
 			//Pour qu'il voit son skin changer (sa main et en f5), on lui dit qu'il respawn (alors qu'il n'est pas mort mais ça marche quand même mdr)
-			PacketPlayOutRespawn respawn = new PacketPlayOutRespawn(DimensionManager.OVERWORLD, 0, WorldType.NORMAL, EnumGamemode.ADVENTURE);
-			((CraftPlayer)getPlayer()).getHandle().playerConnection.sendPacket(respawn);
+			respawnPacket.sendPacket(player);
 			//Enfin, on le téléporte à sa potion actuelle car sinon il se verra dans le vide
 			getPlayer().teleport(getPlayer().getLocation());
 			float speed = getPlayer().getWalkSpeed();

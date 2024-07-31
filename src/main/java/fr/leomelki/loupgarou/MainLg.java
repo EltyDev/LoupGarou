@@ -3,11 +3,10 @@ package fr.leomelki.loupgarou;
 
 import java.io.File;
 import java.lang.reflect.Constructor;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
+import com.comphenix.protocol.wrappers.Pair;
+import fr.leomelki.com.comphenix.packetwrapper.wrappers.play.clientbound.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -35,12 +34,6 @@ import com.comphenix.protocol.wrappers.EnumWrappers.ItemSlot;
 import com.comphenix.protocol.wrappers.PlayerInfoData;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
 
-import fr.leomelki.com.comphenix.packetwrapper.WrapperPlayServerEntityEquipment;
-import fr.leomelki.com.comphenix.packetwrapper.WrapperPlayServerNamedSoundEffect;
-import fr.leomelki.com.comphenix.packetwrapper.WrapperPlayServerPlayerInfo;
-import fr.leomelki.com.comphenix.packetwrapper.WrapperPlayServerScoreboardTeam;
-import fr.leomelki.com.comphenix.packetwrapper.WrapperPlayServerUpdateHealth;
-import fr.leomelki.com.comphenix.packetwrapper.WrapperPlayServerUpdateTime;
 import fr.leomelki.loupgarou.classes.LGGame;
 import fr.leomelki.loupgarou.classes.LGPlayer;
 import fr.leomelki.loupgarou.classes.LGWinType;
@@ -81,7 +74,6 @@ import fr.leomelki.loupgarou.roles.RVampire;
 import fr.leomelki.loupgarou.roles.RVillageois;
 import fr.leomelki.loupgarou.roles.RVoyante;
 import fr.leomelki.loupgarou.roles.Role;
-import fr.leomelki.loupgarou.utils.VariousUtils;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -119,7 +111,7 @@ public class MainLg extends JavaPlugin{
 				public void onPacketSending(PacketEvent event) {
 					WrapperPlayServerUpdateTime time = new WrapperPlayServerUpdateTime(event.getPacket());
 					LGPlayer lgp = LGPlayer.thePlayer(event.getPlayer());
-					if(lgp.getGame() != null && lgp.getGame().getTime() != time.getTimeOfDay())
+					if(lgp.getGame() != null && lgp.getGame().getTime() != time.getDayTime())
 						event.setCancelled(true);
 				}
 			}
@@ -129,7 +121,7 @@ public class MainLg extends JavaPlugin{
 			@Override
 			public void onPacketSending(PacketEvent event) {
 					WrapperPlayServerNamedSoundEffect sound = new WrapperPlayServerNamedSoundEffect(event.getPacket());
-					if(sound.getSoundEffect() == Sound.ENTITY_PLAYER_ATTACK_NODAMAGE)
+					if(sound.getSound() == Sound.ENTITY_PLAYER_ATTACK_NODAMAGE)
 						event.setCancelled(true);
 			}
 		}
@@ -140,7 +132,7 @@ public class MainLg extends JavaPlugin{
 				LGPlayer player = LGPlayer.thePlayer(event.getPlayer());
 				WrapperPlayServerPlayerInfo info = new WrapperPlayServerPlayerInfo(event.getPacket());
 				ArrayList<PlayerInfoData> datas = new ArrayList<PlayerInfoData>();
-				for(PlayerInfoData data : info.getData()) {
+				for(PlayerInfoData data : info.getEntries()) {
 					LGPlayer lgp = LGPlayer.thePlayer(Bukkit.getPlayer(data.getProfile().getUUID()));
 					if(player.getGame() != null && player.getGame() == lgp.getGame()) {
 						LGUpdatePrefixEvent evt2 = new LGUpdatePrefixEvent(player.getGame(), lgp, player, "");
@@ -163,7 +155,7 @@ public class MainLg extends JavaPlugin{
 					}else
 						datas.add(data);
 				}
-				info.setData(datas);
+				info.setEntries(datas);
 			}
 		});
 		protocolManager.addPacketListener(new PacketAdapter(this, ListenerPriority.NORMAL, PacketType.Play.Server.UPDATE_HEALTH) {
@@ -181,7 +173,8 @@ public class MainLg extends JavaPlugin{
 			public void onPacketSending(PacketEvent event) {
 				LGPlayer player = LGPlayer.thePlayer(event.getPlayer());
 				WrapperPlayServerScoreboardTeam team = new WrapperPlayServerScoreboardTeam(event.getPacket());
-				team.setColor(ChatColor.WHITE);
+				WrapperPlayServerScoreboardTeam.WrappedParameters params = new WrapperPlayServerScoreboardTeam.WrappedParameters();
+				params.setColor(ChatColor.WHITE);
 				Player other = Bukkit.getPlayer(team.getName());
 				if(other == null)return;
 				LGPlayer lgp = LGPlayer.thePlayer(other);
@@ -189,10 +182,11 @@ public class MainLg extends JavaPlugin{
 					LGUpdatePrefixEvent evt2 = new LGUpdatePrefixEvent(player.getGame(), lgp, player, "");
 					Bukkit.getPluginManager().callEvent(evt2);
 					if(evt2.getPrefix().length() > 0)
-						team.setPrefix(WrappedChatComponent.fromText(evt2.getPrefix()));
+						params.setPlayerPrefix(WrappedChatComponent.fromText(evt2.getPrefix()));
 					else
-						team.setPrefix(WrappedChatComponent.fromText("§f"));
+						params.setPlayerPrefix(WrappedChatComponent.fromText("§f"));
 				}
+				team.setParameters(params);
 			}
 		});
 		protocolManager.addPacketListener(new PacketAdapter(this, ListenerPriority.NORMAL, PacketType.Play.Server.ENTITY_EQUIPMENT) {
@@ -201,8 +195,10 @@ public class MainLg extends JavaPlugin{
 				LGPlayer player = LGPlayer.thePlayer(event.getPlayer());
 				if(player.getGame() != null) {
 					WrapperPlayServerEntityEquipment equip = new WrapperPlayServerEntityEquipment(event.getPacket());
-					if(equip.getSlot() == ItemSlot.OFFHAND && equip.getEntityID() != player.getPlayer().getEntityId())
-						equip.setItem(new ItemStack(Material.AIR));
+					if(equip.getSlots().stream().anyMatch(pair -> pair.getFirst() == ItemSlot.OFFHAND) && equip.getEntity() != player.getPlayer().getEntityId()) {
+						Pair<ItemSlot, ItemStack> slot = equip.getSlots().stream().filter(pair -> pair.getFirst() == ItemSlot.OFFHAND).findFirst().get();
+						slot.setSecond(new ItemStack(Material.AIR));
+					}
 				}
 			}
 		});
