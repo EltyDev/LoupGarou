@@ -9,11 +9,13 @@ import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.StringJoiner;
 
+import com.comphenix.protocol.wrappers.Pair;
+import com.comphenix.protocol.wrappers.WrappedDataValue;
+import it.unimi.dsi.fastutil.ints.IntList;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_20_R3.CraftWorld;
-import org.bukkit.craftbukkit.v1_20_R3.entity.CraftPlayer;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -23,11 +25,11 @@ import com.comphenix.protocol.wrappers.WrappedDataWatcher;
 import com.comphenix.protocol.wrappers.WrappedDataWatcher.WrappedDataWatcherObject;
 import com.comphenix.protocol.wrappers.WrappedWatchableObject;
 
-import fr.leomelki.com.comphenix.packetwrapper.WrapperPlayServerEntityDestroy;
-import fr.leomelki.com.comphenix.packetwrapper.WrapperPlayServerEntityEquipment;
-import fr.leomelki.com.comphenix.packetwrapper.WrapperPlayServerEntityLook;
-import fr.leomelki.com.comphenix.packetwrapper.WrapperPlayServerEntityMetadata;
-import fr.leomelki.com.comphenix.packetwrapper.WrapperPlayServerSpawnEntityLiving;
+import fr.leomelki.com.comphenix.packetwrapper.wrappers.play.clientbound.WrapperPlayServerEntityDestroy;
+import fr.leomelki.com.comphenix.packetwrapper.wrappers.play.clientbound.WrapperPlayServerEntityEquipment;
+import fr.leomelki.com.comphenix.packetwrapper.wrappers.play.clientbound.WrapperPlayServerEntityLook;
+import fr.leomelki.com.comphenix.packetwrapper.wrappers.play.clientbound.WrapperPlayServerEntityMetadata;
+import fr.leomelki.com.comphenix.packetwrapper.wrappers.play.clientbound.WrapperPlayServerSpawnEntity;
 import fr.leomelki.loupgarou.MainLg;
 import fr.leomelki.loupgarou.classes.LGGame.TextGenerator;
 import fr.leomelki.loupgarou.classes.LGPlayer.LGChooseCallback;
@@ -36,11 +38,9 @@ import fr.leomelki.loupgarou.utils.VariousUtils;
 import lombok.Getter;
 import net.minecraft.network.syncher.DataWatcher;
 import net.minecraft.network.syncher.DataWatcherObject;
-import net.minecraft.network.syncher.DataWatcherRegistry;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.decoration.EntityArmorStand;
 import net.minecraft.network.chat.IChatBaseComponent;
-import net.minecraft.network.protocol.game.PacketPlayOutEntityMetadata;
 
 public class LGVote {
 	@Getter LGPlayer choosen;
@@ -299,7 +299,7 @@ public class LGVote {
 	private void updateVotes(LGPlayer voted, boolean kill) {
 		int entityId = Integer.MIN_VALUE+voted.getPlayer().getEntityId();
 		WrapperPlayServerEntityDestroy destroy = new WrapperPlayServerEntityDestroy();
-		destroy.setEntityIds(new int[] {entityId});
+		destroy.setEntityIds(IntList.of(entityId));
 		for(LGPlayer lgp : viewers)
 			destroy.sendPacket(lgp.getPlayer());
 		
@@ -319,8 +319,8 @@ public class LGVote {
 		if(votes.containsKey(voted) && !kill) {
 			Location loc = voted.getPlayer().getLocation();
 
-			WrapperPlayServerSpawnEntityLiving spawn = new WrapperPlayServerSpawnEntityLiving();
-			spawn.setEntityID(entityId);
+			WrapperPlayServerSpawnEntity spawn = new WrapperPlayServerSpawnEntity();
+			spawn.setId(entityId);
 			spawn.setType(EntityType.DROPPED_ITEM);
 			//spawn.setMetadata(new WrappedDataWatcher(Arrays.asList(new WrappedWatchableObject(0, (byte)0x20), new WrappedWatchableObject(5, true))));
 			spawn.setX(loc.getX());
@@ -342,11 +342,14 @@ public class LGVote {
 			datawatcher.a(az, Optional.ofNullable(IChatBaseComponent.ChatSerializer.a("{\"text\":\"" + voteContent + "\"}")));
 			datawatcher.a(aA, true);
 			WrapperPlayServerEntityMetadata meta = new WrapperPlayServerEntityMetadata();
-			meta.setEntityID(entityId);
-			meta.setMetadata(Arrays.asList(
-					new WrappedWatchableObject(invisible, 0x20),
-					new WrappedWatchableObject(customName, "{\"text\":\"" + voteContent + "\"}"),
-					new WrappedWatchableObject(customNameVisible, true)
+			WrappedWatchableObject invisibleObject = new WrappedWatchableObject(invisible, 0x20);
+			WrappedWatchableObject customNameObject = new WrappedWatchableObject(customName, "{\"text\":\"" + voteContent + "\"}");
+			WrappedWatchableObject customNameVisibleObject = new WrappedWatchableObject(customNameVisible, true);
+			meta.setId(entityId);
+			meta.setPackedItems(Arrays.asList(
+					new WrappedDataValue(invisibleObject.getIndex(), invisibleObject.getWatcherObject().getSerializer(), invisibleObject.getRawValue()),
+					new WrappedDataValue(customNameObject.getIndex(), customNameObject.getWatcherObject().getSerializer(), customNameObject.getRawValue()),
+					new WrappedDataValue(customNameVisibleObject.getIndex(), customNameVisibleObject.getWatcherObject().getSerializer(), customNameVisibleObject.getRawValue())
 			));
 			for(LGPlayer lgp : viewers) {
 				spawn.sendPacket(lgp.getPlayer());
@@ -390,37 +393,42 @@ public class LGVote {
 							 noGravity = new WrappedDataWatcherObject(5, WrappedDataWatcher.Registry.get(Boolean.class)),
 							 customNameVisible = new WrappedDataWatcherObject(3, WrappedDataWatcher.Registry.get(Boolean.class)),
 							 customName = new WrappedDataWatcherObject(2, WrappedDataWatcher.Registry.get(IChatBaseComponent.class)),
-							 item = new WrappedDataWatcherObject(7, WrappedDataWatcher.Registry.get(net.minecraft.server.v1_15_R1.ItemStack.class));
+							 item = new WrappedDataWatcherObject(7, WrappedDataWatcher.Registry.get(net.minecraft.world.item.ItemStack.class));
 	private void showVoting(LGPlayer to, LGPlayer ofWho) {
 		int entityId = -to.getPlayer().getEntityId();
 		WrapperPlayServerEntityDestroy destroy = new WrapperPlayServerEntityDestroy();
-		destroy.setEntityIds(new int[] {entityId});
+		destroy.setEntityIds(IntList.of(entityId));
 		destroy.sendPacket(to.getPlayer());
 		if(ofWho != null) {
-			WrapperPlayServerSpawnEntityLiving spawn = new WrapperPlayServerSpawnEntityLiving();
-			spawn.setEntityID(entityId);
+			WrapperPlayServerSpawnEntity spawn = new WrapperPlayServerSpawnEntity();
+			spawn.setId(entityId);
 			spawn.setType(EntityType.DROPPED_ITEM);
 			//spawn.setMetadata(new WrappedDataWatcher(Arrays.asList(new WrappedWatchableObject(0, (byte)0x20), new WrappedWatchableObject(5, true))));
 			Location loc = ofWho.getPlayer().getLocation();
 			spawn.setX(loc.getX());
 			spawn.setY(loc.getY()+1.3);
 			spawn.setZ(loc.getZ());
-			spawn.setHeadPitch(0);
+			spawn.setYHeadRot((byte) 0);
 			Location toLoc = to.getPlayer().getLocation();
 			double diffX = loc.getX()-toLoc.getX(),
 				   diffZ = loc.getZ()-toLoc.getZ();
 			float yaw = 180-((float) Math.toDegrees(Math.atan2(diffX, diffZ)));
 			
-			spawn.setYaw(yaw);
+			spawn.setXRot((byte) yaw);
 			spawn.sendPacket(to.getPlayer());
 			
 			WrapperPlayServerEntityMetadata meta = new WrapperPlayServerEntityMetadata();
-			meta.setEntityID(entityId);
-			meta.setMetadata(Arrays.asList(new WrappedWatchableObject(invisible, (byte)0x20), new WrappedWatchableObject(noGravity, true)));
+			meta.setId(entityId);
+			WrappedWatchableObject invisibleObject = new WrappedWatchableObject(invisible, 0x20);
+			WrappedWatchableObject noGravityObject = new WrappedWatchableObject(noGravity, true);
+			meta.setPackedItems(Arrays.asList(
+					new WrappedDataValue(invisibleObject.getIndex(), invisibleObject.getWatcherObject().getSerializer(), invisibleObject.getRawValue()),
+					new WrappedDataValue(noGravityObject.getIndex(), noGravityObject.getWatcherObject().getSerializer(), noGravityObject.getRawValue())
+			));
 			meta.sendPacket(to.getPlayer());
 			
 			WrapperPlayServerEntityLook look = new WrapperPlayServerEntityLook();
-			look.setEntityID(entityId);
+			look.setEntityId(entityId);
 			look.setPitch(0);
 			look.setYaw(yaw);
 			look.sendPacket(to.getPlayer());
@@ -430,10 +438,11 @@ public class LGVote {
 				@Override
 				public void run() {
 					WrapperPlayServerEntityEquipment equip = new WrapperPlayServerEntityEquipment();
-					equip.setEntityID(entityId);
-					equip.setSlot(ItemSlot.HEAD);
-			        ItemStack skull = new ItemStack(Material.EMERALD);
-					equip.setItem(skull);
+					equip.setEntity(entityId);
+					ItemStack skull = new ItemStack(Material.EMERALD);
+					equip.setSlots(List.of(
+							new Pair<>(ItemSlot.HEAD, skull)
+                    ));
 					equip.sendPacket(to.getPlayer());
 				}
 			}.runTaskLater(MainLg.getInstance(), 2);
@@ -442,33 +451,38 @@ public class LGVote {
 	
 	private void showArrow(LGPlayer to, LGPlayer ofWho, int entityId) {
 		WrapperPlayServerEntityDestroy destroy = new WrapperPlayServerEntityDestroy();
-		destroy.setEntityIds(new int[] {entityId});
+		destroy.setEntityIds(IntList.of(entityId));
 		destroy.sendPacket(to.getPlayer());
 		if(ofWho != null) {
-			WrapperPlayServerSpawnEntityLiving spawn = new WrapperPlayServerSpawnEntityLiving();
-			spawn.setEntityID(entityId);
+			WrapperPlayServerSpawnEntity spawn = new WrapperPlayServerSpawnEntity();
+			spawn.setId(entityId);
 			spawn.setType(EntityType.DROPPED_ITEM);
 			//spawn.setMetadata(new WrappedDataWatcher());
 			Location loc = ofWho.getPlayer().getLocation();
 			spawn.setX(loc.getX());
 			spawn.setY(loc.getY()+1.3);
 			spawn.setZ(loc.getZ());
-			spawn.setHeadPitch(0);
+			spawn.setYHeadRot((byte) 0);
 			Location toLoc = to.getPlayer().getLocation();
 			double diffX = loc.getX()-toLoc.getX(),
 				   diffZ = loc.getZ()-toLoc.getZ();
 			float yaw = 180-((float) Math.toDegrees(Math.atan2(diffX, diffZ)));
 			
-			spawn.setYaw(yaw);
+			spawn.setXRot((byte) yaw);
 			spawn.sendPacket(to.getPlayer());
 			
 			WrapperPlayServerEntityMetadata meta = new WrapperPlayServerEntityMetadata();
-			meta.setEntityID(entityId);
-			meta.setMetadata(Arrays.asList(new WrappedWatchableObject(invisible, (byte)0x20), new WrappedWatchableObject(noGravity, true)));
+			meta.setId(entityId);
+			WrappedWatchableObject invisibleObject = new WrappedWatchableObject(invisible, 0x20);
+			WrappedWatchableObject noGravityObject = new WrappedWatchableObject(noGravity, true);
+			meta.setPackedItems(Arrays.asList(
+					new WrappedDataValue(invisibleObject.getIndex(), invisibleObject.getWatcherObject().getSerializer(), invisibleObject.getRawValue()),
+					new WrappedDataValue(noGravityObject.getIndex(), noGravityObject.getWatcherObject().getSerializer(), noGravityObject.getRawValue())
+			));
 			meta.sendPacket(to.getPlayer());
 			
 			WrapperPlayServerEntityLook look = new WrapperPlayServerEntityLook();
-			look.setEntityID(entityId);
+			look.setEntityId(entityId);
 			look.setPitch(0);
 			look.setYaw(yaw);
 			look.sendPacket(to.getPlayer());
@@ -478,10 +492,11 @@ public class LGVote {
 				@Override
 				public void run() {
 					WrapperPlayServerEntityEquipment equip = new WrapperPlayServerEntityEquipment();
-					equip.setEntityID(entityId);
-					equip.setSlot(ItemSlot.HEAD);
+					equip.setEntity(entityId);
 			        ItemStack skull = new ItemStack(Material.EMERALD);
-					equip.setItem(skull);
+					equip.setSlots(List.of(
+							new Pair<>(ItemSlot.HEAD, skull)
+					));
 					equip.sendPacket(to.getPlayer());
 				}
 			}.runTaskLater(MainLg.getInstance(), 2);

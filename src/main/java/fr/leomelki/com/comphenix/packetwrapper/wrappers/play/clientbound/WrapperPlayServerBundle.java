@@ -1,8 +1,8 @@
 package fr.leomelki.com.comphenix.packetwrapper.wrappers.play.clientbound;
 
-import fr.leomelki.com.comphenix.packetwrapper.wrappers.AbstractPacket;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketContainer;
+import fr.leomelki.com.comphenix.packetwrapper.wrappers.AbstractPacket;
 
 /**
  * A collection of several packets that are sent to the client at once. The client executes each of these packets

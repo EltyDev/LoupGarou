@@ -1,16 +1,16 @@
 package fr.leomelki.com.comphenix.packetwrapper.wrappers.play.clientbound;
 
-import fr.leomelki.com.comphenix.packetwrapper.wrappers.AbstractPacket;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.InternalStructure;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.utility.MinecraftReflection;
 import com.comphenix.protocol.wrappers.BukkitConverters;
 import com.comphenix.protocol.wrappers.EnumWrappers.NativeGameMode;
-import org.bukkit.World;
 import fr.leomelki.com.comphenix.packetwrapper.util.TestExclusion;
+import fr.leomelki.com.comphenix.packetwrapper.wrappers.AbstractPacket;
 import fr.leomelki.com.comphenix.packetwrapper.wrappers.data.ResourceKey;
 import fr.leomelki.com.comphenix.packetwrapper.wrappers.data.Vector3I;
+import org.bukkit.World;
 
 import javax.annotation.Nullable;
 import java.util.Optional;

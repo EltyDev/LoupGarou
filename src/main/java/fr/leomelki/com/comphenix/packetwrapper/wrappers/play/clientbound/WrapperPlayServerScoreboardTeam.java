@@ -1,6 +1,5 @@
 package fr.leomelki.com.comphenix.packetwrapper.wrappers.play.clientbound;
 
-import fr.leomelki.com.comphenix.packetwrapper.wrappers.AbstractPacket;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.reflect.EquivalentConverter;
@@ -10,8 +9,9 @@ import com.comphenix.protocol.reflect.accessors.Accessors;
 import com.comphenix.protocol.reflect.accessors.ConstructorAccessor;
 import com.comphenix.protocol.utility.MinecraftReflection;
 import com.comphenix.protocol.wrappers.*;
-import org.bukkit.ChatColor;
 import fr.leomelki.com.comphenix.packetwrapper.util.UtilityMethod;
+import fr.leomelki.com.comphenix.packetwrapper.wrappers.AbstractPacket;
+import org.bukkit.ChatColor;
 
 import javax.annotation.Nullable;
 import java.util.Collection;

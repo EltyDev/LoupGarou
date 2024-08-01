@@ -1,11 +1,11 @@
 package fr.leomelki.com.comphenix.packetwrapper.wrappers.play.clientbound;
 
-import fr.leomelki.com.comphenix.packetwrapper.wrappers.AbstractPacket;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.wrappers.EnumWrappers.SoundCategory;
 import com.comphenix.protocol.wrappers.MinecraftKey;
 import fr.leomelki.com.comphenix.packetwrapper.util.TestExclusion;
+import fr.leomelki.com.comphenix.packetwrapper.wrappers.AbstractPacket;
 
 public class WrapperPlayServerStopSound extends AbstractPacket {
 

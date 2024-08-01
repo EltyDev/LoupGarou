@@ -5,8 +5,8 @@ import java.util.Arrays;
 import com.comphenix.protocol.wrappers.EnumWrappers.ScoreboardAction;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
 
-import fr.leomelki.com.comphenix.packetwrapper.WrapperPlayServerScoreboardScore;
-import fr.leomelki.com.comphenix.packetwrapper.WrapperPlayServerScoreboardTeam;
+import fr.leomelki.com.comphenix.packetwrapper.wrappers.play.clientbound.WrapperPlayServerScoreboardScore;
+import fr.leomelki.com.comphenix.packetwrapper.wrappers.play.clientbound.WrapperPlayServerScoreboardTeam;
 import fr.leomelki.loupgarou.utils.VariousUtils;
 import lombok.Getter;
 import lombok.Setter;
@@ -31,17 +31,19 @@ public class CustomScoreboardEntry {
 			WrapperPlayServerScoreboardTeam team = new WrapperPlayServerScoreboardTeam();
 			team.setPlayers(Arrays.asList(name));
 			team.setName(name);
-			team.setMode(0);
-			team.setPrefix(prefix);
+			team.setMethod(0);
+			WrapperPlayServerScoreboardTeam.WrappedParameters params = new WrapperPlayServerScoreboardTeam.WrappedParameters();
+			params.setPlayerPrefix(prefix);
 			if(suffix != null)
-				team.setSuffix(suffix);
+				params.setPlayerSuffix(suffix);
+			team.setParameters(params);
 			team.sendPacket(scoreboard.getPlayer().getPlayer());
 			
 			WrapperPlayServerScoreboardScore score = new WrapperPlayServerScoreboardScore();
 			score.setObjectiveName(scoreboard.getName());
-			score.setScoreboardAction(ScoreboardAction.CHANGE);
-			score.setScoreName(name);
-			score.setValue(this.score);
+			score.setMethod(ScoreboardAction.CHANGE);
+			score.setObjectiveName(name);
+			score.setScore(this.score);
 			score.sendPacket(scoreboard.getPlayer().getPlayer());
 		}
 	}
@@ -79,10 +81,12 @@ public class CustomScoreboardEntry {
 				WrapperPlayServerScoreboardTeam team = new WrapperPlayServerScoreboardTeam();
 				team.setPlayers(Arrays.asList(name));
 				team.setName(name);
-				team.setMode(2);
-				team.setPrefix(prefix);
+				team.setMethod(2);
+				WrapperPlayServerScoreboardTeam.WrappedParameters params = new WrapperPlayServerScoreboardTeam.WrappedParameters();
+				params.setPlayerPrefix(prefix);
 				if(suffix != null)
-					team.setSuffix(suffix);
+					params.setPlayerSuffix(suffix);
+				team.setParameters(params);
 				team.sendPacket(scoreboard.getPlayer().getPlayer());
 			}
 		}
@@ -95,13 +99,13 @@ public class CustomScoreboardEntry {
 		if(prefix != null && scoreboard.isShown()) {
 			WrapperPlayServerScoreboardScore score = new WrapperPlayServerScoreboardScore();
 			score.setObjectiveName(scoreboard.getName());
-			score.setScoreboardAction(ScoreboardAction.REMOVE);
-			score.setScoreName(name);
+			score.setMethod(ScoreboardAction.REMOVE);
+			score.setObjectiveName(name);
 			score.sendPacket(scoreboard.getPlayer().getPlayer());
 			
 			WrapperPlayServerScoreboardTeam team = new WrapperPlayServerScoreboardTeam();
 			team.setName(name);
-			team.setMode(1);
+			team.setMethod(1);
 			team.sendPacket(scoreboard.getPlayer().getPlayer());
 		}
 	}

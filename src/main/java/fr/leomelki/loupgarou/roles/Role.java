@@ -1,19 +1,18 @@
 package fr.leomelki.loupgarou.roles;
 
-import java.util.ArrayList;
-import java.util.concurrent.ThreadLocalRandom;
-
-import org.bukkit.Bukkit;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.event.Listener;
-import org.bukkit.scheduler.BukkitRunnable;
-
 import fr.leomelki.loupgarou.MainLg;
 import fr.leomelki.loupgarou.classes.LGCustomItems;
 import fr.leomelki.loupgarou.classes.LGGame;
 import fr.leomelki.loupgarou.classes.LGPlayer;
 import lombok.Getter;
 import lombok.Setter;
+import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.event.Listener;
+import org.bukkit.scheduler.BukkitRunnable;
+
+import java.util.ArrayList;
+import java.util.concurrent.ThreadLocalRandom;
 
 public abstract class Role implements Listener{
 	@Getter @Setter private int waitedPlayers;

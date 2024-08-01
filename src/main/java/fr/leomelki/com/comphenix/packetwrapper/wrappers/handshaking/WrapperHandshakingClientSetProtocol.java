@@ -1,9 +1,9 @@
 package fr.leomelki.com.comphenix.packetwrapper.wrappers.handshaking;
 
-import fr.leomelki.com.comphenix.packetwrapper.wrappers.AbstractPacket;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.PacketType.Protocol;
 import com.comphenix.protocol.events.PacketContainer;
+import fr.leomelki.com.comphenix.packetwrapper.wrappers.AbstractPacket;
 
 public class WrapperHandshakingClientSetProtocol extends AbstractPacket {
 

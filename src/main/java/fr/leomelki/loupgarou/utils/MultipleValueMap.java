@@ -1,13 +1,12 @@
 package fr.leomelki.loupgarou.utils;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
-
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
 
 public class MultipleValueMap<K, V> {
 	private HashMap<K, List<V>> map = new HashMap<>();

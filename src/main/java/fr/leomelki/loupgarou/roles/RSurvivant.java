@@ -1,7 +1,15 @@
 package fr.leomelki.loupgarou.roles;
 
-import java.util.Arrays;
-
+import fr.leomelki.loupgarou.MainLg;
+import fr.leomelki.loupgarou.classes.LGGame;
+import fr.leomelki.loupgarou.classes.LGPlayer;
+import fr.leomelki.loupgarou.classes.LGWinType;
+import fr.leomelki.loupgarou.events.LGGameEndEvent;
+import fr.leomelki.loupgarou.events.LGNightPlayerPreKilledEvent;
+import fr.leomelki.loupgarou.events.LGPlayerKilledEvent.Reason;
+import fr.leomelki.loupgarou.events.LGPreDayStartEvent;
+import fr.leomelki.loupgarou.events.LGVampiredEvent;
+import fr.leomelki.loupgarou.utils.VariableCache;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_20_R3.inventory.CraftInventoryCustom;
@@ -14,16 +22,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import fr.leomelki.loupgarou.MainLg;
-import fr.leomelki.loupgarou.classes.LGGame;
-import fr.leomelki.loupgarou.classes.LGPlayer;
-import fr.leomelki.loupgarou.classes.LGWinType;
-import fr.leomelki.loupgarou.events.LGGameEndEvent;
-import fr.leomelki.loupgarou.events.LGNightPlayerPreKilledEvent;
-import fr.leomelki.loupgarou.events.LGPlayerKilledEvent.Reason;
-import fr.leomelki.loupgarou.events.LGPreDayStartEvent;
-import fr.leomelki.loupgarou.events.LGVampiredEvent;
-import fr.leomelki.loupgarou.utils.VariableCache;
+import java.util.Arrays;
 
 public class RSurvivant extends Role{
 	public RSurvivant(LGGame game) {

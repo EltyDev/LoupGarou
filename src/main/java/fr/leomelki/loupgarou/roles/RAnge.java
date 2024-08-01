@@ -1,20 +1,13 @@
 package fr.leomelki.loupgarou.roles;
 
-import java.util.ArrayList;
-
-import org.bukkit.event.EventHandler;
-
 import fr.leomelki.loupgarou.classes.LGGame;
 import fr.leomelki.loupgarou.classes.LGPlayer;
 import fr.leomelki.loupgarou.classes.LGWinType;
-import fr.leomelki.loupgarou.events.LGDayEndEvent;
-import fr.leomelki.loupgarou.events.LGEndCheckEvent;
-import fr.leomelki.loupgarou.events.LGGameEndEvent;
-import fr.leomelki.loupgarou.events.LGMayorVoteEvent;
-import fr.leomelki.loupgarou.events.LGNightStart;
-import fr.leomelki.loupgarou.events.LGPlayerGotKilledEvent;
-import fr.leomelki.loupgarou.events.LGVoteEvent;
+import fr.leomelki.loupgarou.events.*;
 import fr.leomelki.loupgarou.events.LGPlayerKilledEvent.Reason;
+import org.bukkit.event.EventHandler;
+
+import java.util.ArrayList;
 
 public class RAnge extends Role{
 	public RAnge(LGGame game) {

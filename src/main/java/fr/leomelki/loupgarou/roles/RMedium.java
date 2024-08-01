@@ -1,13 +1,12 @@
 package fr.leomelki.loupgarou.roles;
 
-import org.bukkit.event.EventHandler;
-
 import fr.leomelki.loupgarou.classes.LGGame;
 import fr.leomelki.loupgarou.classes.LGPlayer;
 import fr.leomelki.loupgarou.classes.chat.LGChat;
 import fr.leomelki.loupgarou.events.LGDayEndEvent;
 import fr.leomelki.loupgarou.events.LGPreDayStartEvent;
 import fr.leomelki.loupgarou.events.LGRoleTurnEndEvent;
+import org.bukkit.event.EventHandler;
 
 public class RMedium extends Role{
 	public RMedium(LGGame game) {

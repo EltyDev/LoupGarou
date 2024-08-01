@@ -1,33 +1,18 @@
 package fr.leomelki.loupgarou.roles;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map.Entry;
-
+import fr.leomelki.loupgarou.classes.*;
+import fr.leomelki.loupgarou.classes.LGCustomItems.LGCustomItemsConstraints;
+import fr.leomelki.loupgarou.classes.chat.LGChat;
+import fr.leomelki.loupgarou.events.*;
+import fr.leomelki.loupgarou.events.LGPlayerKilledEvent.Reason;
+import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.inventory.ItemStack;
 
-import fr.leomelki.com.comphenix.packetwrapper.WrapperPlayServerScoreboardTeam;
-import fr.leomelki.loupgarou.classes.LGCustomItems;
-import fr.leomelki.loupgarou.classes.LGCustomSkin;
-import fr.leomelki.loupgarou.classes.LGGame;
-import fr.leomelki.loupgarou.classes.LGPlayer;
-import fr.leomelki.loupgarou.classes.LGVote;
-import fr.leomelki.loupgarou.classes.LGWinType;
-import fr.leomelki.loupgarou.classes.LGCustomItems.LGCustomItemsConstraints;
-import fr.leomelki.loupgarou.classes.chat.LGChat;
-import fr.leomelki.loupgarou.events.LGCustomItemChangeEvent;
-import fr.leomelki.loupgarou.events.LGDayEndEvent;
-import fr.leomelki.loupgarou.events.LGGameEndEvent;
-import fr.leomelki.loupgarou.events.LGNightEndEvent;
-import fr.leomelki.loupgarou.events.LGNightStart;
-import fr.leomelki.loupgarou.events.LGPlayerKilledEvent.Reason;
-import fr.leomelki.loupgarou.events.LGSkinLoadEvent;
-import fr.leomelki.loupgarou.events.LGUpdatePrefixEvent;
-import fr.leomelki.loupgarou.events.LGVampiredEvent;
-import lombok.Getter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map.Entry;
 
 public class RVampire extends Role{
 

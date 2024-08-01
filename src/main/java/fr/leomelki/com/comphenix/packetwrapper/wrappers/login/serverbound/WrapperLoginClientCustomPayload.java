@@ -1,12 +1,12 @@
 package fr.leomelki.com.comphenix.packetwrapper.wrappers.login.serverbound;
 
-import fr.leomelki.com.comphenix.packetwrapper.wrappers.AbstractPacket;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.InternalStructure;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.utility.MinecraftReflection;
-import io.netty.buffer.ByteBuf;
 import fr.leomelki.com.comphenix.packetwrapper.util.TestExclusion;
+import fr.leomelki.com.comphenix.packetwrapper.wrappers.AbstractPacket;
+import io.netty.buffer.ByteBuf;
 
 public class WrapperLoginClientCustomPayload extends AbstractPacket {
 

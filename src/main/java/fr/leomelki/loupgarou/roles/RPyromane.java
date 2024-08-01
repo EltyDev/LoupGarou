@@ -1,9 +1,16 @@
 package fr.leomelki.loupgarou.roles;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
+import fr.leomelki.com.comphenix.packetwrapper.wrappers.play.clientbound.WrapperPlayServerHeldItemSlot;
+import fr.leomelki.loupgarou.MainLg;
+import fr.leomelki.loupgarou.classes.LGGame;
+import fr.leomelki.loupgarou.classes.LGPlayer;
+import fr.leomelki.loupgarou.classes.LGPlayer.LGChooseCallback;
+import fr.leomelki.loupgarou.classes.LGWinType;
+import fr.leomelki.loupgarou.events.LGEndCheckEvent;
+import fr.leomelki.loupgarou.events.LGGameEndEvent;
+import fr.leomelki.loupgarou.events.LGPlayerKilledEvent;
+import fr.leomelki.loupgarou.events.LGPlayerKilledEvent.Reason;
+import fr.leomelki.loupgarou.events.LGPyromaneGasoilEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_20_R3.inventory.CraftInventoryCustom;
@@ -18,17 +25,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import fr.leomelki.com.comphenix.packetwrapper.WrapperPlayServerHeldItemSlot;
-import fr.leomelki.loupgarou.MainLg;
-import fr.leomelki.loupgarou.classes.LGGame;
-import fr.leomelki.loupgarou.classes.LGPlayer;
-import fr.leomelki.loupgarou.classes.LGWinType;
-import fr.leomelki.loupgarou.classes.LGPlayer.LGChooseCallback;
-import fr.leomelki.loupgarou.events.LGEndCheckEvent;
-import fr.leomelki.loupgarou.events.LGGameEndEvent;
-import fr.leomelki.loupgarou.events.LGPlayerKilledEvent;
-import fr.leomelki.loupgarou.events.LGPyromaneGasoilEvent;
-import fr.leomelki.loupgarou.events.LGPlayerKilledEvent.Reason;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class RPyromane extends Role{
 	static ItemStack[] items = new ItemStack[9];

@@ -1,8 +1,20 @@
 package fr.leomelki.loupgarou.roles;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
+import com.comphenix.protocol.wrappers.EnumWrappers.ItemSlot;
+import com.comphenix.protocol.wrappers.Pair;
+import com.comphenix.protocol.wrappers.WrappedDataValue;
+import com.comphenix.protocol.wrappers.WrappedDataWatcher;
+import com.comphenix.protocol.wrappers.WrappedDataWatcher.WrappedDataWatcherObject;
+import com.comphenix.protocol.wrappers.WrappedWatchableObject;
+import fr.leomelki.com.comphenix.packetwrapper.wrappers.play.clientbound.*;
+import fr.leomelki.loupgarou.MainLg;
+import fr.leomelki.loupgarou.classes.LGGame;
+import fr.leomelki.loupgarou.classes.LGPlayer;
+import fr.leomelki.loupgarou.classes.LGPlayer.LGChooseCallback;
+import fr.leomelki.loupgarou.classes.LGWinType;
+import fr.leomelki.loupgarou.events.*;
+import fr.leomelki.loupgarou.events.LGPlayerKilledEvent.Reason;
+import it.unimi.dsi.fastutil.ints.IntList;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -13,27 +25,8 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import com.comphenix.protocol.wrappers.EnumWrappers.ItemSlot;
-import com.comphenix.protocol.wrappers.WrappedDataWatcher;
-import com.comphenix.protocol.wrappers.WrappedDataWatcher.WrappedDataWatcherObject;
-import com.comphenix.protocol.wrappers.WrappedWatchableObject;
-
-import fr.leomelki.com.comphenix.packetwrapper.WrapperPlayServerEntityDestroy;
-import fr.leomelki.com.comphenix.packetwrapper.WrapperPlayServerEntityEquipment;
-import fr.leomelki.com.comphenix.packetwrapper.WrapperPlayServerEntityLook;
-import fr.leomelki.com.comphenix.packetwrapper.WrapperPlayServerEntityMetadata;
-import fr.leomelki.com.comphenix.packetwrapper.WrapperPlayServerSpawnEntityLiving;
-import fr.leomelki.loupgarou.MainLg;
-import fr.leomelki.loupgarou.classes.LGGame;
-import fr.leomelki.loupgarou.classes.LGPlayer;
-import fr.leomelki.loupgarou.classes.LGPlayer.LGChooseCallback;
-import fr.leomelki.loupgarou.classes.LGWinType;
-import fr.leomelki.loupgarou.events.LGEndCheckEvent;
-import fr.leomelki.loupgarou.events.LGGameEndEvent;
-import fr.leomelki.loupgarou.events.LGPlayerGotKilledEvent;
-import fr.leomelki.loupgarou.events.LGPlayerKilledEvent;
-import fr.leomelki.loupgarou.events.LGPlayerKilledEvent.Reason;
-import fr.leomelki.loupgarou.events.LGUpdatePrefixEvent;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class RCupidon extends Role{
 	public RCupidon(LGGame game) {
@@ -94,13 +87,13 @@ public class RCupidon extends Role{
 						if(first == choosen) {
 							int entityId = Integer.MAX_VALUE-choosen.getPlayer().getEntityId();
 							WrapperPlayServerEntityDestroy destroy = new WrapperPlayServerEntityDestroy();
-							destroy.setEntityIds(new int[] {entityId});
+							destroy.setEntityIds(IntList.of(entityId));
 							destroy.sendPacket(player.getPlayer());
 						} else {
 						//	sendHead(player, choosen);
 							int entityId = Integer.MAX_VALUE-first.getPlayer().getEntityId();
 							WrapperPlayServerEntityDestroy destroy = new WrapperPlayServerEntityDestroy();
-							destroy.setEntityIds(new int[] {entityId});
+							destroy.setEntityIds(IntList.of(entityId));
 							destroy.sendPacket(player.getPlayer());
 							
 							setInLove(first, choosen);
@@ -138,32 +131,37 @@ public class RCupidon extends Role{
 							 noGravity = new WrappedDataWatcherObject(5, WrappedDataWatcher.Registry.get(Boolean.class));
 	protected void sendHead(LGPlayer to, LGPlayer ofWho) {
 		int entityId = Integer.MAX_VALUE-ofWho.getPlayer().getEntityId();
-		WrapperPlayServerSpawnEntityLiving spawn = new WrapperPlayServerSpawnEntityLiving();
-		spawn.setEntityID(entityId);
+		WrapperPlayServerSpawnEntity spawn = new WrapperPlayServerSpawnEntity();
+		spawn.setId(entityId);
 		spawn.setType(EntityType.DROPPED_ITEM);
 		//spawn.setMetadata(new WrappedDataWatcher(Arrays.asList(new WrappedWatchableObject(invisible, (byte)0x20), new WrappedWatchableObject(noGravity, true))));
 		Location loc = ofWho.getPlayer().getLocation();
 		spawn.setX(loc.getX());
 		spawn.setY(loc.getY()+1.9);
 		spawn.setZ(loc.getZ());
-		spawn.setHeadPitch(0);
+		spawn.setYHeadRot((byte) 0);
 		Location toLoc = to.getPlayer().getLocation();
 		double diffX = loc.getX()-toLoc.getX(),
 			   diffZ = loc.getZ()-toLoc.getZ();
 		float yaw = 180-((float) Math.toDegrees(Math.atan2(diffX, diffZ)));
 		
-		spawn.setYaw(yaw);
+		spawn.setXRot((byte) yaw);
 		spawn.sendPacket(to.getPlayer());
 		
 		WrapperPlayServerEntityLook look = new WrapperPlayServerEntityLook();
-		look.setEntityID(entityId);
+		look.setEntityId(entityId);
 		look.setPitch(0);
 		look.setYaw(yaw);
 		look.sendPacket(to.getPlayer());
 		
 		WrapperPlayServerEntityMetadata meta = new WrapperPlayServerEntityMetadata();
-		meta.setEntityID(entityId);
-		meta.setMetadata(Arrays.asList(new WrappedWatchableObject(invisible, (byte)0x20), new WrappedWatchableObject(noGravity, true)));
+		meta.setId(entityId);
+		WrappedWatchableObject invisbleObject = new WrappedWatchableObject(invisible, (byte)0x20);
+		WrappedWatchableObject noGravityObject = new WrappedWatchableObject(noGravity, true);
+		meta.setPackedItems(Arrays.asList(
+				new WrappedDataValue(invisbleObject.getIndex(), invisbleObject.getWatcherObject().getSerializer(), invisbleObject.getRawValue()),
+				new WrappedDataValue(noGravityObject.getIndex(), noGravityObject.getWatcherObject().getSerializer(), noGravityObject.getRawValue())
+		));
 		meta.sendPacket(to.getPlayer());
 		
 		
@@ -173,10 +171,11 @@ public class RCupidon extends Role{
 			@Override
 			public void run() {
 				WrapperPlayServerEntityEquipment equip = new WrapperPlayServerEntityEquipment();
-				equip.setEntityID(entityId);
-				equip.setSlot(ItemSlot.HEAD);
+				equip.setEntity(entityId);
 		        ItemStack skull = new ItemStack(Material.SUGAR);
-				equip.setItem(skull);
+				equip.setSlots(Arrays.asList(
+						new Pair<>(ItemSlot.HEAD, skull)
+				));
 				equip.sendPacket(to.getPlayer());
 			}
 		}.runTaskLater(MainLg.getInstance(), 2);
@@ -213,7 +212,7 @@ public class RCupidon extends Role{
 			int[] intList = new int[ids.size()];
 			for(int i = 0;i<ids.size();i++)
 				intList[i] = ids.get(i);
-			destroy.setEntityIds(intList);
+			destroy.setEntityIds(IntList.of(intList));
 			for(LGPlayer lgp : getGame().getInGame())
 				destroy.sendPacket(lgp.getPlayer());
 			

@@ -1,10 +1,10 @@
 package fr.leomelki.com.comphenix.packetwrapper.wrappers.play.clientbound;
 
-import fr.leomelki.com.comphenix.packetwrapper.wrappers.AbstractPacket;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.wrappers.BlockPosition;
 import com.comphenix.protocol.wrappers.WrappedBlockData;
+import fr.leomelki.com.comphenix.packetwrapper.wrappers.AbstractPacket;
 
 /**
  * Send by server to client when 2 or more blocks are changed within the same chunk on the same tick.

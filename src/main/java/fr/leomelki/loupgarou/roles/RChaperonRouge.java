@@ -1,14 +1,13 @@
 package fr.leomelki.loupgarou.roles;
 
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-
 import fr.leomelki.loupgarou.classes.LGGame;
 import fr.leomelki.loupgarou.classes.LGPlayer;
 import fr.leomelki.loupgarou.events.LGNightEndEvent;
 import fr.leomelki.loupgarou.events.LGNightPlayerPreKilledEvent;
 import fr.leomelki.loupgarou.events.LGPlayerKilledEvent.Reason;
 import fr.leomelki.loupgarou.events.LGRoleTurnEndEvent;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 
 public class RChaperonRouge extends Role{
 	public RChaperonRouge(LGGame game) {

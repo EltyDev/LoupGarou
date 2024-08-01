@@ -1,10 +1,9 @@
 package fr.leomelki.loupgarou.roles;
 
-import org.bukkit.potion.PotionEffectType;
-
 import fr.leomelki.loupgarou.classes.LGCustomItems;
 import fr.leomelki.loupgarou.classes.LGGame;
 import fr.leomelki.loupgarou.classes.LGPlayer;
+import org.bukkit.potion.PotionEffectType;
 
 public class RChienLoupLG extends Role{
 	public RChienLoupLG(LGGame game) {

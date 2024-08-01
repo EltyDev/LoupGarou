@@ -5,8 +5,8 @@ import java.util.List;
 
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
 
-import fr.leomelki.com.comphenix.packetwrapper.WrapperPlayServerScoreboardDisplayObjective;
-import fr.leomelki.com.comphenix.packetwrapper.WrapperPlayServerScoreboardObjective;
+import fr.leomelki.com.comphenix.packetwrapper.wrappers.play.clientbound.WrapperPlayServerScoreboardDisplayObjective;
+import fr.leomelki.com.comphenix.packetwrapper.wrappers.play.clientbound.WrapperPlayServerScoreboardObjective;
 import fr.leomelki.loupgarou.classes.LGPlayer;
 import fr.leomelki.loupgarou.utils.RandomString;
 import lombok.Getter;
@@ -31,13 +31,13 @@ public class CustomScoreboard {
 	
 	public void show() {
 		WrapperPlayServerScoreboardObjective objective = new WrapperPlayServerScoreboardObjective();
-		objective.setMode(0);
-		objective.setName(name);
+		objective.setMethod(0);
+		objective.setObjectiveName(name);
 		objective.setDisplayName(WrappedChatComponent.fromText(displayName));
 		objective.sendPacket(player.getPlayer());
 		WrapperPlayServerScoreboardDisplayObjective display = new WrapperPlayServerScoreboardDisplayObjective();
-		display.setPosition(1);
-		display.setScoreName(name);
+		display.setSlot(1);
+		display.setObjectiveName(name);
 		display.sendPacket(player.getPlayer());
 		shown = true;
 		
@@ -47,8 +47,8 @@ public class CustomScoreboard {
 	
 	public void hide() {
 		WrapperPlayServerScoreboardObjective remove = new WrapperPlayServerScoreboardObjective();
-		remove.setMode(1);
-		remove.setName(name);
+		remove.setMethod(1);
+		remove.setObjectiveName(name);
 		remove.sendPacket(player.getPlayer());
 		
 		for(CustomScoreboardEntry entry : entries)

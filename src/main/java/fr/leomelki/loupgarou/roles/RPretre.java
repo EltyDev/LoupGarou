@@ -1,8 +1,18 @@
 package fr.leomelki.loupgarou.roles;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
+import com.comphenix.protocol.wrappers.WrappedDataValue;
+import com.comphenix.protocol.wrappers.WrappedDataWatcher;
+import com.comphenix.protocol.wrappers.WrappedDataWatcher.WrappedDataWatcherObject;
+import com.comphenix.protocol.wrappers.WrappedWatchableObject;
+import fr.leomelki.com.comphenix.packetwrapper.wrappers.play.clientbound.WrapperPlayServerEntityMetadata;
+import fr.leomelki.com.comphenix.packetwrapper.wrappers.play.clientbound.WrapperPlayServerHeldItemSlot;
+import fr.leomelki.loupgarou.MainLg;
+import fr.leomelki.loupgarou.classes.LGCustomItems;
+import fr.leomelki.loupgarou.classes.LGGame;
+import fr.leomelki.loupgarou.classes.LGPlayer;
+import fr.leomelki.loupgarou.classes.LGPlayer.LGChooseCallback;
+import fr.leomelki.loupgarou.events.LGPreDayStartEvent;
+import fr.leomelki.loupgarou.utils.VariousUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_20_R3.inventory.CraftInventoryCustom;
@@ -18,19 +28,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import com.comphenix.protocol.wrappers.WrappedDataWatcher;
-import com.comphenix.protocol.wrappers.WrappedDataWatcher.WrappedDataWatcherObject;
-import com.comphenix.protocol.wrappers.WrappedWatchableObject;
-
-import fr.leomelki.com.comphenix.packetwrapper.WrapperPlayServerEntityMetadata;
-import fr.leomelki.com.comphenix.packetwrapper.WrapperPlayServerHeldItemSlot;
-import fr.leomelki.loupgarou.MainLg;
-import fr.leomelki.loupgarou.classes.LGCustomItems;
-import fr.leomelki.loupgarou.classes.LGGame;
-import fr.leomelki.loupgarou.classes.LGPlayer;
-import fr.leomelki.loupgarou.classes.LGPlayer.LGChooseCallback;
-import fr.leomelki.loupgarou.events.LGPreDayStartEvent;
-import fr.leomelki.loupgarou.utils.VariousUtils;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class RPretre extends Role{
 	static ItemStack[] items = new ItemStack[9];
@@ -122,8 +121,11 @@ public class RPretre extends Role{
 				if(lgp.getPlayer() != null) {
 					player.getPlayer().showPlayer(lgp.getPlayer());
 					WrapperPlayServerEntityMetadata meta = new WrapperPlayServerEntityMetadata();
-					meta.setEntityID(lgp.getPlayer().getEntityId());
-					meta.setMetadata(Arrays.asList(new WrappedWatchableObject(invisible, (byte)0)));
+					meta.setId(lgp.getPlayer().getEntityId());
+					WrappedWatchableObject invisibleObject = new WrappedWatchableObject(invisible, 0);
+					meta.setPackedItems(Arrays.asList(
+							new WrappedDataValue(invisibleObject.getIndex(), invisibleObject.getWatcherObject().getSerializer(), invisibleObject.getRawValue())
+					));
 					meta.sendPacket(player.getPlayer());
 				}
 			}else

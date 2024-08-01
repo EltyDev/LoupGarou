@@ -1,9 +1,9 @@
 package fr.leomelki.com.comphenix.packetwrapper.wrappers.play.clientbound;
 
-import fr.leomelki.com.comphenix.packetwrapper.wrappers.AbstractPacket;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.wrappers.Converters;
+import fr.leomelki.com.comphenix.packetwrapper.wrappers.AbstractPacket;
 
 import java.util.List;
 import java.util.UUID;

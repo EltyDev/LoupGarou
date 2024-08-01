@@ -1,10 +1,10 @@
 package fr.leomelki.com.comphenix.packetwrapper.wrappers.status.clientbound;
 
-import fr.leomelki.com.comphenix.packetwrapper.wrappers.AbstractPacket;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.wrappers.WrappedServerPing;
 import fr.leomelki.com.comphenix.packetwrapper.util.TestExclusion;
+import fr.leomelki.com.comphenix.packetwrapper.wrappers.AbstractPacket;
 
 public class WrapperStatusServerServerInfo extends AbstractPacket {
 

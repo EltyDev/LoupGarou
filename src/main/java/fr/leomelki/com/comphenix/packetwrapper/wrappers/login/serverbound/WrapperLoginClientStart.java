@@ -1,9 +1,9 @@
 package fr.leomelki.com.comphenix.packetwrapper.wrappers.login.serverbound;
 
-import fr.leomelki.com.comphenix.packetwrapper.wrappers.AbstractPacket;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.wrappers.Converters;
+import fr.leomelki.com.comphenix.packetwrapper.wrappers.AbstractPacket;
 
 import javax.annotation.Nullable;
 import java.util.Optional;

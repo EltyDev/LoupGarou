@@ -1,15 +1,13 @@
 package fr.leomelki.loupgarou.roles;
 
-import org.bukkit.event.EventHandler;
-import org.bukkit.scheduler.BukkitRunnable;
-
 import fr.leomelki.loupgarou.MainLg;
 import fr.leomelki.loupgarou.classes.LGGame;
 import fr.leomelki.loupgarou.classes.LGPlayer;
 import fr.leomelki.loupgarou.classes.LGPlayer.LGChooseCallback;
 import fr.leomelki.loupgarou.events.LGDayEndEvent;
-import fr.leomelki.loupgarou.events.LGNightStart;
 import fr.leomelki.loupgarou.events.LGVoteEvent;
+import org.bukkit.event.EventHandler;
+import org.bukkit.scheduler.BukkitRunnable;
 
 public class RCorbeau extends Role{
 	public RCorbeau(LGGame game) {

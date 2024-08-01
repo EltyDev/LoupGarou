@@ -1,12 +1,12 @@
 package fr.leomelki.com.comphenix.packetwrapper.wrappers.play.serverbound;
 
-import fr.leomelki.com.comphenix.packetwrapper.wrappers.AbstractPacket;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.reflect.EquivalentConverter;
 import com.comphenix.protocol.utility.MinecraftReflection;
 import com.comphenix.protocol.wrappers.BlockPosition;
 import com.comphenix.protocol.wrappers.EnumWrappers;
+import fr.leomelki.com.comphenix.packetwrapper.wrappers.AbstractPacket;
 
 public class WrapperPlayClientSetCommandBlock extends AbstractPacket {
 

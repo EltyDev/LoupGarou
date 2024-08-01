@@ -1,10 +1,10 @@
 package fr.leomelki.com.comphenix.packetwrapper.wrappers.play.clientbound;
 
-import fr.leomelki.com.comphenix.packetwrapper.wrappers.AbstractPacket;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.PacketContainer;
 import fr.leomelki.com.comphenix.packetwrapper.util.TestExclusion;
 import fr.leomelki.com.comphenix.packetwrapper.util.UtilityMethod;
+import fr.leomelki.com.comphenix.packetwrapper.wrappers.AbstractPacket;
 
 /**
  * Sent whenever an entity should change animation.

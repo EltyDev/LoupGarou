@@ -1,18 +1,17 @@
 package fr.leomelki.loupgarou.roles;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.StringJoiner;
-
-import org.bukkit.event.EventHandler;
-import org.bukkit.scheduler.BukkitRunnable;
-
 import fr.leomelki.loupgarou.MainLg;
 import fr.leomelki.loupgarou.classes.LGGame;
 import fr.leomelki.loupgarou.classes.LGPlayer;
 import fr.leomelki.loupgarou.events.LGGameEndEvent;
 import fr.leomelki.loupgarou.events.LGPlayerKilledEvent;
 import fr.leomelki.loupgarou.events.LGPlayerKilledEvent.Reason;
+import org.bukkit.event.EventHandler;
+import org.bukkit.scheduler.BukkitRunnable;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.StringJoiner;
 
 public class RBouffon extends Role{
 	public RBouffon(LGGame game) {

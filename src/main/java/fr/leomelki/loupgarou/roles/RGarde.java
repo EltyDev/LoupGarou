@@ -1,10 +1,5 @@
 package fr.leomelki.loupgarou.roles;
 
-import java.util.Arrays;
-import java.util.List;
-
-import org.bukkit.event.EventHandler;
-
 import fr.leomelki.loupgarou.classes.LGGame;
 import fr.leomelki.loupgarou.classes.LGPlayer;
 import fr.leomelki.loupgarou.classes.LGPlayer.LGChooseCallback;
@@ -12,6 +7,10 @@ import fr.leomelki.loupgarou.events.LGNightPlayerPreKilledEvent;
 import fr.leomelki.loupgarou.events.LGPlayerKilledEvent.Reason;
 import fr.leomelki.loupgarou.events.LGPreDayStartEvent;
 import fr.leomelki.loupgarou.events.LGVampiredEvent;
+import org.bukkit.event.EventHandler;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class RGarde extends Role{
 	public RGarde(LGGame game) {

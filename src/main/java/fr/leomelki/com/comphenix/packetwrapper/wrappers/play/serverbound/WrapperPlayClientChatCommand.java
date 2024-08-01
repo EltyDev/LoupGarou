@@ -1,6 +1,5 @@
 package fr.leomelki.com.comphenix.packetwrapper.wrappers.play.serverbound;
 
-import fr.leomelki.com.comphenix.packetwrapper.wrappers.AbstractPacket;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.InternalStructure;
 import com.comphenix.protocol.events.PacketContainer;
@@ -12,9 +11,10 @@ import com.comphenix.protocol.utility.MinecraftReflection;
 import com.comphenix.protocol.wrappers.AutoWrapper;
 import com.comphenix.protocol.wrappers.BukkitConverters;
 import com.comphenix.protocol.wrappers.WrappedMessageSignature;
+import fr.leomelki.com.comphenix.packetwrapper.wrappers.AbstractPacket;
+import fr.leomelki.com.comphenix.packetwrapper.wrappers.data.WrappedLastSeenMessagesUpdate;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
-import fr.leomelki.com.comphenix.packetwrapper.wrappers.data.WrappedLastSeenMessagesUpdate;
 
 import java.time.Instant;
 import java.util.ArrayList;

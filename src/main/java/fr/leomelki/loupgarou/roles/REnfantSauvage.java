@@ -1,15 +1,13 @@
 package fr.leomelki.loupgarou.roles;
 
-import java.util.Random;
-
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-
 import fr.leomelki.loupgarou.classes.LGGame;
 import fr.leomelki.loupgarou.classes.LGPlayer;
 import fr.leomelki.loupgarou.classes.LGPlayer.LGChooseCallback;
 import fr.leomelki.loupgarou.events.LGPlayerKilledEvent;
-import fr.leomelki.loupgarou.events.LGPlayerKilledEvent.Reason;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+
+import java.util.Random;
 
 public class REnfantSauvage extends Role{
 	public REnfantSauvage(LGGame game) {

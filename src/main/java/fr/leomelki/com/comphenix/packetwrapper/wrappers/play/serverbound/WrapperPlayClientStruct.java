@@ -1,6 +1,5 @@
 package fr.leomelki.com.comphenix.packetwrapper.wrappers.play.serverbound;
 
-import fr.leomelki.com.comphenix.packetwrapper.wrappers.AbstractPacket;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.InternalStructure;
 import com.comphenix.protocol.events.PacketContainer;
@@ -8,10 +7,11 @@ import com.comphenix.protocol.reflect.EquivalentConverter;
 import com.comphenix.protocol.utility.MinecraftReflection;
 import com.comphenix.protocol.wrappers.BlockPosition;
 import com.comphenix.protocol.wrappers.EnumWrappers;
+import fr.leomelki.com.comphenix.packetwrapper.wrappers.AbstractPacket;
+import fr.leomelki.com.comphenix.packetwrapper.wrappers.data.Vector3I;
 import org.bukkit.block.structure.Mirror;
 import org.bukkit.block.structure.StructureRotation;
 import org.bukkit.block.structure.UsageMode;
-import fr.leomelki.com.comphenix.packetwrapper.wrappers.data.Vector3I;
 
 public class WrapperPlayClientStruct extends AbstractPacket {
 

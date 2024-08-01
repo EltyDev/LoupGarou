@@ -1,26 +1,17 @@
 package fr.leomelki.loupgarou.roles;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map.Entry;
-
+import fr.leomelki.com.comphenix.packetwrapper.wrappers.play.clientbound.WrapperPlayServerScoreboardTeam;
+import fr.leomelki.loupgarou.classes.*;
+import fr.leomelki.loupgarou.classes.chat.LGChat;
+import fr.leomelki.loupgarou.events.*;
+import fr.leomelki.loupgarou.events.LGPlayerKilledEvent.Reason;
+import lombok.Getter;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 
-import fr.leomelki.com.comphenix.packetwrapper.WrapperPlayServerScoreboardTeam;
-import fr.leomelki.loupgarou.classes.LGCustomSkin;
-import fr.leomelki.loupgarou.classes.LGGame;
-import fr.leomelki.loupgarou.classes.LGPlayer;
-import fr.leomelki.loupgarou.classes.LGVote;
-import fr.leomelki.loupgarou.classes.LGWinType;
-import fr.leomelki.loupgarou.classes.chat.LGChat;
-import fr.leomelki.loupgarou.events.LGDayEndEvent;
-import fr.leomelki.loupgarou.events.LGGameEndEvent;
-import fr.leomelki.loupgarou.events.LGNightEndEvent;
-import fr.leomelki.loupgarou.events.LGPlayerKilledEvent.Reason;
-import fr.leomelki.loupgarou.events.LGSkinLoadEvent;
-import fr.leomelki.loupgarou.events.LGUpdatePrefixEvent;
-import lombok.Getter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map.Entry;
 
 public class RLoupGarou extends Role{
 
@@ -146,7 +137,7 @@ public class RLoupGarou extends Role{
 	public void onGameJoin(LGGameEndEvent e) {
 		if(e.getGame() == getGame()) {
 			WrapperPlayServerScoreboardTeam teamDelete = new WrapperPlayServerScoreboardTeam();
-			teamDelete.setMode(1);
+			teamDelete.setMethod(1);
 			teamDelete.setName("loup_garou_list");
 			
 			for(LGPlayer lgp : getGame().getInGame())

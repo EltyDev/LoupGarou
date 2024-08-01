@@ -1,7 +1,12 @@
 package fr.leomelki.loupgarou.roles;
 
-import java.util.Arrays;
-
+import fr.leomelki.com.comphenix.packetwrapper.wrappers.play.clientbound.WrapperPlayServerHeldItemSlot;
+import fr.leomelki.loupgarou.MainLg;
+import fr.leomelki.loupgarou.classes.LGGame;
+import fr.leomelki.loupgarou.classes.LGPlayer;
+import fr.leomelki.loupgarou.classes.LGPlayer.LGChooseCallback;
+import fr.leomelki.loupgarou.events.LGPlayerKilledEvent;
+import fr.leomelki.loupgarou.events.LGPlayerKilledEvent.Reason;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_20_R3.inventory.CraftInventoryCustom;
@@ -16,13 +21,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import fr.leomelki.com.comphenix.packetwrapper.WrapperPlayServerHeldItemSlot;
-import fr.leomelki.loupgarou.MainLg;
-import fr.leomelki.loupgarou.classes.LGGame;
-import fr.leomelki.loupgarou.classes.LGPlayer;
-import fr.leomelki.loupgarou.classes.LGPlayer.LGChooseCallback;
-import fr.leomelki.loupgarou.events.LGPlayerKilledEvent;
-import fr.leomelki.loupgarou.events.LGPlayerKilledEvent.Reason;
+import java.util.Arrays;
 
 public class RPirate extends Role{
 	static ItemStack[] items = new ItemStack[9];

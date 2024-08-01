@@ -1,6 +1,5 @@
 package fr.leomelki.com.comphenix.packetwrapper.wrappers.play.clientbound;
 
-import fr.leomelki.com.comphenix.packetwrapper.wrappers.AbstractPacket;
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.events.InternalStructure;
 import com.comphenix.protocol.events.PacketContainer;
@@ -10,6 +9,7 @@ import com.comphenix.protocol.wrappers.AutoWrapper;
 import com.comphenix.protocol.wrappers.EnumWrappers;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import com.comphenix.protocol.wrappers.WrappedMessageSignature;
+import fr.leomelki.com.comphenix.packetwrapper.wrappers.AbstractPacket;
 import fr.leomelki.com.comphenix.packetwrapper.wrappers.data.WrappedBoundChatType;
 
 import java.util.BitSet;

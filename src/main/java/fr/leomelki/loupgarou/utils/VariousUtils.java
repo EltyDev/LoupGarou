@@ -1,15 +1,12 @@
 package fr.leomelki.loupgarou.utils;
 
-import java.lang.reflect.InvocationTargetException;
-
-import org.bukkit.Location;
-import org.bukkit.WorldBorder;
-import org.bukkit.entity.Player;
-
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.wrappers.EnumWrappers;
+import org.bukkit.Location;
+import org.bukkit.WorldBorder;
+import org.bukkit.entity.Player;
 
 public class VariousUtils {
 	public static double distanceSquaredXZ(Location from, Location to) {
@@ -34,12 +31,8 @@ public class VariousUtils {
 		
 		container.getLongs().write(0, (long) 0);
 
-		try {
-			ProtocolLibrary.getProtocolManager().sendServerPacket(p, container);
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();
-		}
-	}
+        ProtocolLibrary.getProtocolManager().sendServerPacket(p, container);
+    }
 	private static char[] hex = "0123456789abcdef".toCharArray();
 	public static char toHex(int i) {
 		return hex[i];

@@ -1,13 +1,12 @@
 package fr.leomelki.loupgarou.roles;
 
-import java.util.Arrays;
-import java.util.List;
-
-import org.bukkit.event.EventHandler;
-
 import fr.leomelki.loupgarou.classes.LGGame;
 import fr.leomelki.loupgarou.classes.LGPlayer;
 import fr.leomelki.loupgarou.events.LGRoleTurnEndEvent;
+import org.bukkit.event.EventHandler;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class RPetiteFille extends Role{
 	public RPetiteFille(LGGame game) {

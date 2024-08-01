@@ -1,12 +1,11 @@
 package fr.leomelki.loupgarou.roles;
 
-import java.util.Comparator;
-
-import org.bukkit.potion.PotionEffectType;
-
 import fr.leomelki.loupgarou.classes.LGCustomItems;
 import fr.leomelki.loupgarou.classes.LGGame;
 import fr.leomelki.loupgarou.classes.LGPlayer;
+import org.bukkit.potion.PotionEffectType;
+
+import java.util.Comparator;
 
 public class REnfantSauvageLG extends Role{
 	public REnfantSauvageLG(LGGame game) {

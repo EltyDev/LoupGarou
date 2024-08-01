@@ -15,7 +15,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
 
-import fr.leomelki.com.comphenix.packetwrapper.WrapperPlayServerScoreboardTeam;
+import fr.leomelki.com.comphenix.packetwrapper.wrappers.play.clientbound.WrapperPlayServerScoreboardTeam;
 import fr.leomelki.loupgarou.MainLg;
 import fr.leomelki.loupgarou.classes.LGPlayer;
 import fr.leomelki.loupgarou.events.LGPlayerKilledEvent.Reason;
@@ -28,9 +28,11 @@ public class JoinListener implements Listener{
 		
 		WrapperPlayServerScoreboardTeam myTeam = new WrapperPlayServerScoreboardTeam();
 		myTeam.setName(p.getName());
-		myTeam.setPrefix(WrappedChatComponent.fromText(""));
+		WrapperPlayServerScoreboardTeam.WrappedParameters params = new WrapperPlayServerScoreboardTeam.WrappedParameters();
+		params.setPlayerPrefix(WrappedChatComponent.fromText(""));
 		myTeam.setPlayers(Arrays.asList(p.getName()));
-		myTeam.setMode(0);
+		myTeam.setMethod(0);
+		myTeam.setParameters(params);
 		boolean noSpec = p.getGameMode() != GameMode.SPECTATOR;
 		for(Player player : Bukkit.getOnlinePlayers())
 			if(player != p) {
@@ -38,9 +40,11 @@ public class JoinListener implements Listener{
 					player.hidePlayer(p);
 				WrapperPlayServerScoreboardTeam team = new WrapperPlayServerScoreboardTeam();
 				team.setName(player.getName());
-				team.setPrefix(WrappedChatComponent.fromText(""));
+				WrapperPlayServerScoreboardTeam.WrappedParameters param = new WrapperPlayServerScoreboardTeam.WrappedParameters();
+				params.setPlayerPrefix(WrappedChatComponent.fromText(""));
+				team.setParameters(param);
 				team.setPlayers(Arrays.asList(player.getName()));
-				team.setMode(0);
+				team.setMethod(0);
 				
 				team.sendPacket(p);
 				myTeam.sendPacket(player);

@@ -1,11 +1,10 @@
 package fr.leomelki.loupgarou.events;
 
-import org.bukkit.event.Event;
-import org.bukkit.event.HandlerList;
-
 import fr.leomelki.loupgarou.classes.LGGame;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.bukkit.event.Event;
+import org.bukkit.event.HandlerList;
 
 @RequiredArgsConstructor
 public class LGEvent extends Event{

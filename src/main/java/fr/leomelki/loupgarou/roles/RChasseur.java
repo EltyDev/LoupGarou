@@ -1,18 +1,16 @@
 package fr.leomelki.loupgarou.roles;
 
-import java.util.ArrayList;
-
-import org.bukkit.Bukkit;
-import org.bukkit.event.EventHandler;
-
 import fr.leomelki.loupgarou.classes.LGGame;
 import fr.leomelki.loupgarou.classes.LGPlayer;
 import fr.leomelki.loupgarou.events.LGDayStartEvent;
-import fr.leomelki.loupgarou.events.LGEndCheckEvent;
 import fr.leomelki.loupgarou.events.LGGameEndEvent;
 import fr.leomelki.loupgarou.events.LGNightStart;
 import fr.leomelki.loupgarou.events.LGPlayerKilledEvent;
 import fr.leomelki.loupgarou.events.LGPlayerKilledEvent.Reason;
+import org.bukkit.Bukkit;
+import org.bukkit.event.EventHandler;
+
+import java.util.ArrayList;
 
 public class RChasseur extends Role{
 	public RChasseur(LGGame game) {
