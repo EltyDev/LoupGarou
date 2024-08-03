@@ -97,13 +97,13 @@ public class LGVote {
     private static final EntityArmorStand eas = new EntityArmorStand(((CraftWorld)Bukkit.getWorlds().get(0)).getHandle(), 0, 0, 0);
     static {
     	try {
-    		Field f = Entity.class.getDeclaredField("az");
+    		Field f = Entity.class.getDeclaredField("aU");
     		f.setAccessible(true);
 	    	az = (DataWatcherObject<Optional<IChatBaseComponent>>) f.get(null);
-	    	f = Entity.class.getDeclaredField("aA");
+	    	f = Entity.class.getDeclaredField("aV");
     		f.setAccessible(true);
 	    	aA = (DataWatcherObject<Boolean>) f.get(null);
-	    	f = Entity.class.getDeclaredField("T");
+	    	f = Entity.class.getDeclaredField("ao");
     		f.setAccessible(true);
 	    	T = (DataWatcherObject<Byte>) f.get(null);
     	}catch(Exception err) {

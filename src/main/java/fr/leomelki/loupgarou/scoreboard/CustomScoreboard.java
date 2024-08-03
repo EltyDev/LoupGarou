@@ -5,12 +5,19 @@ import java.util.List;
 
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
 
+import fr.leomelki.com.comphenix.packetwrapper.PacketWrapper;
 import fr.leomelki.com.comphenix.packetwrapper.wrappers.play.clientbound.WrapperPlayServerScoreboardDisplayObjective;
 import fr.leomelki.com.comphenix.packetwrapper.wrappers.play.clientbound.WrapperPlayServerScoreboardObjective;
 import fr.leomelki.loupgarou.classes.LGPlayer;
 import fr.leomelki.loupgarou.utils.RandomString;
+import io.netty.buffer.Unpooled;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import net.minecraft.network.PacketDataSerializer;
+import net.minecraft.network.chat.IChatBaseComponent;
+import net.minecraft.network.protocol.game.PacketPlayOutScoreboardDisplayObjective;
+import org.bukkit.ChatColor;
+import org.bukkit.craftbukkit.v1_20_R3.entity.CraftPlayer;
 
 @RequiredArgsConstructor
 public class CustomScoreboard {
@@ -36,9 +43,8 @@ public class CustomScoreboard {
 		objective.setDisplayName(WrappedChatComponent.fromText(displayName));
 		objective.sendPacket(player.getPlayer());
 		WrapperPlayServerScoreboardDisplayObjective display = new WrapperPlayServerScoreboardDisplayObjective();
+		display.setObjectiveName(displayName);
 		display.setSlot(1);
-		display.setObjectiveName(name);
-		display.sendPacket(player.getPlayer());
 		shown = true;
 		
 		for(CustomScoreboardEntry entry : entries)

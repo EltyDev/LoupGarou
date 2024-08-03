@@ -1,15 +1,23 @@
 package fr.leomelki.loupgarou.classes;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.Constructor;
 import java.security.SecureRandom;
 import java.util.*;
 import java.util.Map.Entry;
 
+import com.comphenix.protocol.PacketType;
+import fr.leomelki.com.comphenix.packetwrapper.wrappers.play.clientbound.*;
+import io.netty.buffer.Unpooled;
 import it.unimi.dsi.fastutil.ints.IntList;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
+import net.minecraft.network.PacketDataSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.craftbukkit.v1_20_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -27,14 +35,6 @@ import com.comphenix.protocol.wrappers.PlayerInfoData;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import com.comphenix.protocol.wrappers.WrappedGameProfile;
 
-import fr.leomelki.com.comphenix.packetwrapper.wrappers.play.clientbound.WrapperPlayServerChat;
-import fr.leomelki.com.comphenix.packetwrapper.wrappers.play.clientbound.WrapperPlayServerEntityDestroy;
-import fr.leomelki.com.comphenix.packetwrapper.wrappers.play.clientbound.WrapperPlayServerExperience;
-import fr.leomelki.com.comphenix.packetwrapper.wrappers.play.clientbound.WrapperPlayServerPlayerInfo;
-import fr.leomelki.com.comphenix.packetwrapper.wrappers.play.clientbound.WrapperPlayServerScoreboardObjective;
-import fr.leomelki.com.comphenix.packetwrapper.wrappers.play.clientbound.WrapperPlayServerScoreboardTeam;
-import fr.leomelki.com.comphenix.packetwrapper.wrappers.play.clientbound.WrapperPlayServerUpdateHealth;
-import fr.leomelki.com.comphenix.packetwrapper.wrappers.play.clientbound.WrapperPlayServerUpdateTime;
 import fr.leomelki.loupgarou.MainLg;
 import fr.leomelki.loupgarou.classes.LGCustomItems.LGCustomItemsConstraints;
 import fr.leomelki.loupgarou.classes.chat.LGChat;
@@ -101,11 +101,10 @@ public class LGGame implements Listener{
 	private MultipleValueMap<LGPlayerKilledEvent.Reason, LGPlayer> deaths = new MultipleValueMap<LGPlayerKilledEvent.Reason, LGPlayer>();
 
 	public void sendActionBarMessage(String msg) {
-		WrapperPlayServerChat chat = new WrapperPlayServerChat();
-		chat.setIndex((byte)2);
-		chat.setUnsignedContent(WrappedChatComponent.fromText(msg));
-		for(LGPlayer lgp : inGame)
-			chat.sendPacket(lgp.getPlayer());
+		for(LGPlayer lgp : inGame) {
+			Player player = lgp.getPlayer();
+			player.spigot().sendMessage(ChatMessageType.ACTION_BAR, player.getUniqueId(), new TextComponent(msg));
+		}
 	}
 	public void broadcastMessage(String msg) {
 		for(LGPlayer lgp : inGame)
@@ -200,7 +199,6 @@ public class LGGame implements Listener{
 			Player player = lgp.getPlayer();
 			
 			// Clear votes
-
 			WrapperPlayServerEntityDestroy destroy = new WrapperPlayServerEntityDestroy();
 			destroy.setEntityIds(IntList.of(Integer.MIN_VALUE+player.getEntityId()));
 			int[] ids = new int[getInGame().size()+1];
@@ -230,7 +228,8 @@ public class LGGame implements Listener{
 			inGame.add(lgp);
 			
 			lgp.setScoreboard(null);
-			
+
+
 			for(LGPlayer other : getInGame()) {
 				other.updatePrefix();
 				if(lgp != other) {
@@ -241,7 +240,8 @@ public class LGGame implements Listener{
 					other.getPlayer().showPlayer(player);
 				}
 			}
-			
+
+
 			player.setGameMode(GameMode.ADVENTURE);
 			broadcastMessage("§7Le joueur §8"+lgp.getName()+"§7 a rejoint la partie §9(§8"+inGame.size()+"§7/§8"+maxPlayers+"§9)");
 			
@@ -531,11 +531,8 @@ public class LGGame implements Listener{
 			
 			for(LGPlayer lgp : getInGame())
 				if(lgp == killed) {
-					WrapperPlayServerPlayerInfo info = new WrapperPlayServerPlayerInfo();
-					ArrayList<PlayerInfoData> infos = new ArrayList<PlayerInfoData>();
-					info.setActions(Set.of(PlayerInfoAction.REMOVE_PLAYER));
-					infos.add(new PlayerInfoData(new WrappedGameProfile(lgp.getPlayer().getUniqueId(), lgp.getName()), 0, NativeGameMode.ADVENTURE, WrappedChatComponent.fromText(lgp.getName())));
-					info.setEntries(infos);
+					WrapperPlayServerPlayerInfoRemove info = new WrapperPlayServerPlayerInfoRemove();
+					info.setProfileIds(List.of(lgp.getPlayer().getUniqueId()));
 					info.sendPacket(lgp.getPlayer());
 				}else
 					lgp.getPlayer().hidePlayer(killed.getPlayer());

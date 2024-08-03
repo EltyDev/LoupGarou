@@ -3,6 +3,7 @@ package fr.leomelki.loupgarou.listeners;
 import java.util.Arrays;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -30,6 +31,7 @@ public class JoinListener implements Listener{
 		myTeam.setName(p.getName());
 		WrapperPlayServerScoreboardTeam.WrappedParameters params = new WrapperPlayServerScoreboardTeam.WrappedParameters();
 		params.setPlayerPrefix(WrappedChatComponent.fromText(""));
+		params.setColor(ChatColor.WHITE);
 		myTeam.setPlayers(Arrays.asList(p.getName()));
 		myTeam.setMethod(0);
 		myTeam.setParameters(params);

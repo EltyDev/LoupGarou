@@ -6,10 +6,11 @@ import com.comphenix.protocol.wrappers.EnumWrappers.ScoreboardAction;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
 
 import fr.leomelki.com.comphenix.packetwrapper.wrappers.play.clientbound.WrapperPlayServerScoreboardScore;
-import fr.leomelki.com.comphenix.packetwrapper.wrappers.play.clientbound.WrapperPlayServerScoreboardTeam;
+import fr.leomelki.fr.elty.fixpacketwrapper.WrapperPlayServerScoreboardTeam;
 import fr.leomelki.loupgarou.utils.VariousUtils;
 import lombok.Getter;
 import lombok.Setter;
+import org.bukkit.ChatColor;
 
 public class CustomScoreboardEntry {
 	private static WrappedChatComponent nullComponent = WrappedChatComponent.fromText("");
@@ -32,11 +33,9 @@ public class CustomScoreboardEntry {
 			team.setPlayers(Arrays.asList(name));
 			team.setName(name);
 			team.setMethod(0);
-			WrapperPlayServerScoreboardTeam.WrappedParameters params = new WrapperPlayServerScoreboardTeam.WrappedParameters();
-			params.setPlayerPrefix(prefix);
+			team.setPrefix(prefix.toString());
 			if(suffix != null)
-				params.setPlayerSuffix(suffix);
-			team.setParameters(params);
+				team.setSuffix(suffix.toString());
 			team.sendPacket(scoreboard.getPlayer().getPlayer());
 			
 			WrapperPlayServerScoreboardScore score = new WrapperPlayServerScoreboardScore();
@@ -82,11 +81,9 @@ public class CustomScoreboardEntry {
 				team.setPlayers(Arrays.asList(name));
 				team.setName(name);
 				team.setMethod(2);
-				WrapperPlayServerScoreboardTeam.WrappedParameters params = new WrapperPlayServerScoreboardTeam.WrappedParameters();
-				params.setPlayerPrefix(prefix);
+				team.setPrefix(prefix.toString());
 				if(suffix != null)
-					params.setPlayerSuffix(suffix);
-				team.setParameters(params);
+					team.setSuffix(suffix.toString());
 				team.sendPacket(scoreboard.getPlayer().getPlayer());
 			}
 		}

@@ -5,9 +5,19 @@ import java.util.*;
 import com.comphenix.protocol.wrappers.*;
 import fr.leomelki.com.comphenix.packetwrapper.wrappers.play.clientbound.*;
 
+import fr.leomelki.fr.elty.fixpacketwrapper.WrapperPlayServerScoreboardTeam;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
+import net.minecraft.core.GlobalPos;
+import net.minecraft.network.protocol.game.CommonPlayerSpawnInfo;
+import net.minecraft.network.protocol.game.PacketPlayOutRespawn;
+import net.minecraft.server.level.EntityPlayer;
+import net.minecraft.world.level.biome.BiomeManager;
+import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.craftbukkit.v1_20_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -15,7 +25,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import com.comphenix.protocol.wrappers.EnumWrappers.NativeGameMode;
 import com.comphenix.protocol.wrappers.EnumWrappers.PlayerInfoAction;
-import com.comphenix.protocol.wrappers.EnumWrappers.TitleAction;
 
 import fr.leomelki.loupgarou.MainLg;
 import fr.leomelki.loupgarou.classes.chat.LGChat;
@@ -74,10 +83,7 @@ public class LGPlayer {
 	
 	public void sendActionBarMessage(String msg) {
 		if(this.player != null) {
-			WrapperPlayServerChat chat = new WrapperPlayServerChat();
-			chat.setIndex((byte)2);
-			chat.setUnsignedContent(WrappedChatComponent.fromText(msg));
-			chat.sendPacket(getPlayer());
+			player.spigot().sendMessage(ChatMessageType.ACTION_BAR, player.getUniqueId(), TextComponent.fromLegacy(msg));
 		}
 	}
 	public void sendMessage(String msg) {
@@ -137,12 +143,9 @@ public class LGPlayer {
 						WrapperPlayServerScoreboardTeam team = new WrapperPlayServerScoreboardTeam();
 						team.setMethod(2);
 						team.setName(lgp.getName());
-						WrapperPlayServerScoreboardTeam.WrappedParameters params = new WrapperPlayServerScoreboardTeam.WrappedParameters();
-						params.setPlayerPrefix(WrappedChatComponent.fromText(""));
-						team.setParameters(params);
+						team.setPrefix("");
 						team.setPlayers(Arrays.asList(lgp.getName()));
 						team.sendPacket(getPlayer());
-						
 						WrapperPlayServerPlayerInfo info = new WrapperPlayServerPlayerInfo();
 						ArrayList<PlayerInfoData> infos = new ArrayList<PlayerInfoData>();
 						info.setActions(Set.of(PlayerInfoAction.ADD_PLAYER));
@@ -167,13 +170,9 @@ public class LGPlayer {
 				infos.add(new PlayerInfoData(new WrappedGameProfile(getPlayer().getUniqueId(), getName()), 0, NativeGameMode.ADVENTURE, WrappedChatComponent.fromText(getName())));
 				info.setEntries(infos);
 				info.sendPacket(lgp.getPlayer());
-
 				WrapperPlayServerScoreboardTeam team = new WrapperPlayServerScoreboardTeam();
 				team.setMethod(2);
 				team.setName(getName());
-				WrapperPlayServerScoreboardTeam.WrappedParameters params = new WrapperPlayServerScoreboardTeam.WrappedParameters();
-				params.setPlayerPrefix(WrappedChatComponent.fromText(""));
-				team.setParameters(params);
 				team.setPlayers(meList);
 				team.sendPacket(lgp.getPlayer());
 			}
@@ -224,11 +223,22 @@ public class LGPlayer {
 			infos.setEntries(Arrays.asList(new PlayerInfoData(gameProfile, 10, NativeGameMode.SURVIVAL, WrappedChatComponent.fromText(getPlayer().getName()))));
 			infos.sendPacket(getPlayer());
 			World world = player.getWorld();
-			WrapperPlayServerRespawn respawnPacket = new WrapperPlayServerRespawn();
-			respawnPacket.setPlayerGameType(NativeGameMode.fromBukkit(player.getGameMode()));
-			respawnPacket.setDimension(world);
+			EntityPlayer entityPlayer = ((CraftPlayer) player).getHandle();
+			net.minecraft.world.level.World level = entityPlayer.dM();
+			CommonPlayerSpawnInfo spawnInfo = new CommonPlayerSpawnInfo(
+					level.ac(),
+					level.ae(),
+					BiomeManager.a(world.getSeed()),
+					entityPlayer.e.b(),
+					entityPlayer.e.b(),
+					false,
+					true,
+					Optional.of(GlobalPos.a(level.ae(), entityPlayer.R())),
+					entityPlayer.av()
+			);
+			PacketPlayOutRespawn respawn = new PacketPlayOutRespawn(spawnInfo, (byte) 0x01);
+			entityPlayer.c.a(respawn);
 			//Pour qu'il voit son skin changer (sa main et en f5), on lui dit qu'il respawn (alors qu'il n'est pas mort mais ça marche quand même mdr)
-			respawnPacket.sendPacket(player);
 			//Enfin, on le téléporte à sa potion actuelle car sinon il se verra dans le vide
 			getPlayer().teleport(getPlayer().getLocation());
 			float speed = getPlayer().getWalkSpeed();

@@ -143,7 +143,7 @@ public class WrapperPlayServerRespawn extends AbstractPacket {
      *
      * @param value New value for field 'playerGameType'
      */
-    public void setPlayerGameType(NativeGameMode value) {
+    public void     setPlayerGameType(NativeGameMode value) {
         this.handle.getGameModes().write(0, value);
     }
 

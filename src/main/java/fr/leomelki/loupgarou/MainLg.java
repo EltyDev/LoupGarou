@@ -303,7 +303,14 @@ public class MainLg extends JavaPlugin{
 					}
 					return true;
 				}else if(args[0].equalsIgnoreCase("roles")) {
-					if(args.length == 1 || args[1].equalsIgnoreCase("list")) {
+					if (args.length == 1 || args[1].equalsIgnoreCase("resetAll")) {
+						for(String real : getRoles().keySet())
+							MainLg.getInstance().getConfig().set("role."+real, 0);
+						sender.sendMessage(prefix+"§6Vous avez enlevé tous les rôles");
+						saveConfig();
+						loadConfig();
+						sender.sendMessage("§7§oSi vous avez fini de changer les rôles, écriver §8§o/lg joinall§7§o !");
+					}if(args.length == 1 || args[1].equalsIgnoreCase("list")) {
 						sender.sendMessage(prefix+"§6Voici la liste des rôles:");
 						int index = 0;
 						for(String role : getRoles().keySet())
@@ -370,7 +377,7 @@ public class MainLg extends JavaPlugin{
 		if(args.length > 1) {
 			if(args[0].equalsIgnoreCase("roles"))
 				if(args.length == 2)
-					return getStartingList(args[1], "list", "set");
+					return getStartingList(args[1], "list", "set", "resetAll");
 				else if(args.length == 3 && args[1].equalsIgnoreCase("set"))
 					return getStartingList(args[2], getRoles().keySet().toArray(new String[getRoles().size()]));
 				else if(args.length == 4)
