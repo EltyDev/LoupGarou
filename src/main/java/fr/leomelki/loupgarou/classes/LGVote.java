@@ -341,16 +341,7 @@ public class LGVote {
 			datawatcher.a(T, (byte)0x20);
 			datawatcher.a(az, Optional.ofNullable(IChatBaseComponent.ChatSerializer.a("{\"text\":\"" + voteContent + "\"}")));
 			datawatcher.a(aA, true);
-			WrapperPlayServerEntityMetadata meta = new WrapperPlayServerEntityMetadata();
-			WrappedWatchableObject invisibleObject = new WrappedWatchableObject(invisible, 0x20);
-			WrappedWatchableObject customNameObject = new WrappedWatchableObject(customName, "{\"text\":\"" + voteContent + "\"}");
-			WrappedWatchableObject customNameVisibleObject = new WrappedWatchableObject(customNameVisible, true);
-			meta.setId(entityId);
-			meta.setPackedItems(Arrays.asList(
-					new WrappedDataValue(invisibleObject.getIndex(), invisibleObject.getWatcherObject().getSerializer(), invisibleObject.getRawValue()),
-					new WrappedDataValue(customNameObject.getIndex(), customNameObject.getWatcherObject().getSerializer(), customNameObject.getRawValue()),
-					new WrappedDataValue(customNameVisibleObject.getIndex(), customNameVisibleObject.getWatcherObject().getSerializer(), customNameVisibleObject.getRawValue())
-			));
+			WrapperPlayServerEntityMetadata meta = getWrapperPlayServerEntityMetadata(voteContent, entityId);
 			for(LGPlayer lgp : viewers) {
 				spawn.sendPacket(lgp.getPlayer());
 				meta.sendPacket(lgp.getPlayer());
@@ -389,6 +380,21 @@ public class LGVote {
 			//	spawn.sendPacket(lgp.getPlayer());
 		}
 	}
+
+	private WrapperPlayServerEntityMetadata getWrapperPlayServerEntityMetadata(String voteContent, int entityId) {
+		WrapperPlayServerEntityMetadata meta = new WrapperPlayServerEntityMetadata();
+		WrappedWatchableObject invisibleObject = new WrappedWatchableObject(invisible, 0x20);
+		WrappedWatchableObject customNameObject = new WrappedWatchableObject(customName, "{\"text\":\"" + voteContent + "\"}");
+		WrappedWatchableObject customNameVisibleObject = new WrappedWatchableObject(customNameVisible, true);
+		meta.setId(entityId);
+		meta.setPackedItems(Arrays.asList(
+				new WrappedDataValue(invisibleObject.getIndex(), invisibleObject.getWatcherObject().getSerializer(), invisibleObject.getRawValue()),
+				new WrappedDataValue(customNameObject.getIndex(), customNameObject.getWatcherObject().getSerializer(), customNameObject.getRawValue()),
+				new WrappedDataValue(customNameVisibleObject.getIndex(), customNameVisibleObject.getWatcherObject().getSerializer(), customNameVisibleObject.getRawValue())
+		));
+		return meta;
+	}
+
 	WrappedDataWatcherObject invisible = new WrappedDataWatcherObject(0, WrappedDataWatcher.Registry.get(Byte.class)),
 							 noGravity = new WrappedDataWatcherObject(5, WrappedDataWatcher.Registry.get(Boolean.class)),
 							 customNameVisible = new WrappedDataWatcherObject(3, WrappedDataWatcher.Registry.get(Boolean.class)),

@@ -17,11 +17,13 @@ public class VariousUtils {
 	public static void setWarning(Player p, boolean warning) {
 		WrapperPlayServerInitializeBorder border = new WrapperPlayServerInitializeBorder();
 		WorldBorder wb = p.getWorld().getWorldBorder();
+		border.setNewAbsoluteMaxSize(29999984);
 		border.setNewCenterX(p.getLocation().getX());
 		border.setNewCenterZ(p.getLocation().getZ());
 		border.setOldSize(wb.getSize());
 		border.setNewSize(wb.getSize());
-		border.setWarningBlocks(warning ? (int) wb.getSize() : wb.getWarningDistance());
+		border.setWarningTime(warning ? (int) wb.getSize() : wb.getWarningDistance());
+		border.setWarningBlocks(0);
 		border.sendPacket(p);
     }
 	private static char[] hex = "0123456789abcdef".toCharArray();

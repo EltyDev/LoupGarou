@@ -5,12 +5,15 @@ import java.util.Arrays;
 import com.comphenix.protocol.wrappers.EnumWrappers.ScoreboardAction;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import fr.leomelki.com.comphenix.packetwrapper.wrappers.play.clientbound.WrapperPlayServerScoreboardScore;
 import fr.leomelki.fr.elty.fixpacketwrapper.WrapperPlayServerScoreboardTeam;
 import fr.leomelki.loupgarou.utils.VariousUtils;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.ChatColor;
+import org.bukkit.scoreboard.Score;
 
 public class CustomScoreboardEntry {
 	private static WrappedChatComponent nullComponent = WrappedChatComponent.fromText("");
@@ -20,6 +23,7 @@ public class CustomScoreboardEntry {
 	private final String name;
 	private final CustomScoreboard scoreboard;
 	private WrappedChatComponent prefix, suffix;
+	@Getter private String displayName = "";
 
 	public CustomScoreboardEntry(int score, CustomScoreboard scoreboard) {
 		this.score = score;
@@ -37,17 +41,14 @@ public class CustomScoreboardEntry {
 			if(suffix != null)
 				team.setSuffix(suffix.toString());
 			team.sendPacket(scoreboard.getPlayer().getPlayer());
-			
-			WrapperPlayServerScoreboardScore score = new WrapperPlayServerScoreboardScore();
-			score.setObjectiveName(scoreboard.getName());
-			score.setMethod(ScoreboardAction.CHANGE);
-			score.setObjectiveName(name);
-			score.setScore(this.score);
-			score.sendPacket(scoreboard.getPlayer().getPlayer());
+			Score boardScore =  scoreboard.getObjective().getScore(displayName);
+			boardScore.setScore(score);
 		}
 	}
 	
 	public void setDisplayName(String displayName) {
+		scoreboard.getBoard().resetScores(this.displayName);
+		this.displayName = displayName;
 		boolean spawn = prefix == null;
 		if(displayName.length() > 16) {
 			char colorCode = 'f';
@@ -74,9 +75,8 @@ public class CustomScoreboardEntry {
 		}
 		
 		if(scoreboard.isShown()) {
-			if(spawn)
-				show();
-			else {
+			show();
+			if (!spawn) {
 				WrapperPlayServerScoreboardTeam team = new WrapperPlayServerScoreboardTeam();
 				team.setPlayers(Arrays.asList(name));
 				team.setName(name);
@@ -91,14 +91,12 @@ public class CustomScoreboardEntry {
 	public void delete() {
 		hide();
 		prefix = null;
+		displayName = "";
 	}
 	public void hide() {
 		if(prefix != null && scoreboard.isShown()) {
-			WrapperPlayServerScoreboardScore score = new WrapperPlayServerScoreboardScore();
-			score.setObjectiveName(scoreboard.getName());
-			score.setMethod(ScoreboardAction.REMOVE);
-			score.setObjectiveName(name);
-			score.sendPacket(scoreboard.getPlayer().getPlayer());
+
+			scoreboard.getBoard().resetScores(displayName);
 			
 			WrapperPlayServerScoreboardTeam team = new WrapperPlayServerScoreboardTeam();
 			team.setName(name);

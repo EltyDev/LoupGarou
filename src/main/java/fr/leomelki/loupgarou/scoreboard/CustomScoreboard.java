@@ -2,6 +2,7 @@ package fr.leomelki.loupgarou.scoreboard;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
 
@@ -16,10 +17,15 @@ import lombok.RequiredArgsConstructor;
 import net.minecraft.network.PacketDataSerializer;
 import net.minecraft.network.chat.IChatBaseComponent;
 import net.minecraft.network.protocol.game.PacketPlayOutScoreboardDisplayObjective;
+import net.minecraft.world.scores.ScoreboardObjective;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.craftbukkit.v1_20_R3.entity.CraftPlayer;
+import org.bukkit.scoreboard.Criteria;
+import org.bukkit.scoreboard.DisplaySlot;
+import org.bukkit.scoreboard.Objective;
+import org.bukkit.scoreboard.Scoreboard;
 
-@RequiredArgsConstructor
 public class CustomScoreboard {
 	@Getter private final String name = RandomString.generate(16);
 	@Getter private final String displayName;
@@ -31,35 +37,37 @@ public class CustomScoreboard {
 																			  new CustomScoreboardEntry(0, this));
 	@Getter private final LGPlayer player;
 	@Getter private boolean shown;
-	
+
+	@Getter private final Scoreboard board;
+	@Getter private final Objective objective;
+
+	public CustomScoreboard(String displayName, LGPlayer player) {
+		this.player = player;
+		this.displayName = displayName;
+		this.board = Objects.requireNonNull(Bukkit.getScoreboardManager()).getNewScoreboard();
+		this.objective = board.registerNewObjective(name, Criteria.DUMMY, displayName);
+		this.objective.setDisplaySlot(DisplaySlot.SIDEBAR);
+		this.objective.setDisplayName(displayName);
+	}
+
 	public CustomScoreboardEntry getLine(int index) {
 		return entries.get(index);
 	}
-	
+
 	public void show() {
-		WrapperPlayServerScoreboardObjective objective = new WrapperPlayServerScoreboardObjective();
-		objective.setMethod(0);
-		objective.setObjectiveName(name);
-		objective.setDisplayName(WrappedChatComponent.fromText(displayName));
-		objective.sendPacket(player.getPlayer());
-		WrapperPlayServerScoreboardDisplayObjective display = new WrapperPlayServerScoreboardDisplayObjective();
-		display.setObjectiveName(displayName);
-		display.setSlot(1);
+
 		shown = true;
-		
+		player.getPlayer().setScoreboard(board);
 		for(CustomScoreboardEntry entry : entries)
 			entry.show();
 	}
-	
+
 	public void hide() {
-		WrapperPlayServerScoreboardObjective remove = new WrapperPlayServerScoreboardObjective();
-		remove.setMethod(1);
-		remove.setObjectiveName(name);
-		remove.sendPacket(player.getPlayer());
-		
+		player.getPlayer().setScoreboard(Objects.requireNonNull(Bukkit.getScoreboardManager()).getNewScoreboard());
+
 		for(CustomScoreboardEntry entry : entries)
 			entry.hide();
-		
+
 		shown = false;
 	}
 }
